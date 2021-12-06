@@ -8,7 +8,7 @@ For Development:
 3. Delete `type/feature_name`(Optional)
 4. When (features + fix) Done
    1. fully test the `dev` branch
-   2. merge `dev` to `main`
+   2. merge local `dev` to remote `dev`
 
 For Release:
 1. Create a annotated tag in `main` HEAD
