@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorDisable" format="color" />
+    <attr name="colorIcon" format="color" />
+    <attr name="colorInputSearch" format="color" />
+    <attr name="colorInputHint" format="color" />
+</resources>

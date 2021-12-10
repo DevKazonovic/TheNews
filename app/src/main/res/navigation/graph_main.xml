@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graph_main"
+    app:startDestination="@id/forYouPage">
+
+    <fragment
+        android:id="@+id/followingPage"
+        android:name="com.devkazonovic.projects.thenews.presentation.FollowingFragment"
+        android:label="Following" />
+    <fragment
+        android:id="@+id/searchPage"
+        android:name="com.devkazonovic.projects.thenews.presentation.SearchFragment"
+        android:label="" />
+    <fragment
+        android:id="@+id/headlinesPage"
+        android:name="com.devkazonovic.projects.thenews.presentation.HeadlinesFragment"
+        android:label="Headlines" />
+    <fragment
+        android:id="@+id/forYouPage"
+        android:name="com.devkazonovic.projects.thenews.presentation.ForYouFragment"
+        android:label="For You" />
+    <fragment
+        android:id="@+id/languageSettingPage"
+        android:name="com.devkazonovic.projects.thenews.presentation.LanguageSettingFragment"
+        android:label="Languages &amp; Regions" />
+</navigation>

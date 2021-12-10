@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!--Styles : Text Fields-->
+    <style name="Widget.App.Toolbar.SearchView" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.App.TextInputEditText
+        </item>
+        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxBackgroundColor">@color/mtrl_input_fill_bg</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Input.Search.Rounded</item>
+        <item name="startIconTint">@color/mtrl_input_icon_tint</item>
+        <item name="android:textColorHint">?attr/colorInputHint</item>
+    </style>
+
+    <style name="Widget.App.Input.SearchView" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="materialThemeOverlay">
+            @style/ThemeOverlay.App.TextInputEditText
+        </item>
+        <item name="labelVisibilityMode">unlabeled</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxBackgroundColor">@color/mtrl_input_fill_bg</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Input.Search</item>
+        <item name="startIconTint">@color/mtrl_input_icon_tint</item>
+        <item name="android:textColorHint">?attr/colorInputHint</item>
+    </style>
+
+    <style name="ShapeAppearance.Input.Search" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">0dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Input.Search.Rounded" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerSize">28dp</item>
+    </style>
+
+    <style name="ThemeOverlay.App.TextInputEditText" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="editTextStyle">
+            @style/Widget.MaterialComponents.TextInputEditText.OutlinedBox
+        </item>
+    </style>
+
+</resources>

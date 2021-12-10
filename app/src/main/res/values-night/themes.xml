@@ -1,16 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.TheNews" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="backgroundColor">@color/dark</item>
+        <item name="android:colorBackground">@color/dark</item>
+        <item name="colorPrimary">@color/blue_400</item>
+        <item name="colorPrimaryVariant">@color/blue_300</item>
+        <item name="colorSecondary">@color/blue_400</item>
+        <item name="colorSecondaryVariant">@color/blue_300</item>
+        <item name="colorSurface">@color/extra_dark_gray</item>
+        <item name="colorError">@color/semantic_red_dark</item>
+
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="colorOnBackground">@color/white</item>
+
+        <item name="colorDisable">@color/white_trans38</item>
+        <item name="colorIcon">@color/light_gray</item>
+        <item name="colorInputSearch">@color/dark_gray</item>
+        <item name="colorInputHint">@color/extra_extra_light_gray</item>
+
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSurface</item>
+
+
     </style>
 </resources>
