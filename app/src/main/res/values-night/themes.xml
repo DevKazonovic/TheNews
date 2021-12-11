@@ -17,6 +17,7 @@
 
         <item name="colorDisable">@color/white_trans38</item>
         <item name="colorIcon">@color/light_gray</item>
+        <item name="colorCard">@color/dark_gray</item>
         <item name="colorInputSearch">@color/dark_gray</item>
         <item name="colorInputHint">@color/extra_extra_light_gray</item>
 

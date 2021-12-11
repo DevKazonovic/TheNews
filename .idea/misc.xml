@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/circle_empty.xml" value="0.13923611111111112" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/circle_solid.xml" value="0.13923611111111112" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_article.xml" value="0.1648148148148148" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_back.xml" value="0.2722222222222222" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_foryou.xml" value="0.2722222222222222" />
@@ -13,11 +15,14 @@
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_search.xml" value="0.2722222222222222" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_star.xml" value="0.2722222222222222" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_blank.xml" value="0.19270833333333334" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_following.xml" value="0.10833333333333334" />
-        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_foryou.xml" value="0.1" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_foryou.xml" value="0.25" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_headlines.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_language_setting.xml" value="0.25" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_search.xml" value="0.33" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_topstory.xml" value="0.2282958199356913" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_circle.xml" value="0.8452380952380952" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/menu/menu_bottom_nav.xml" value="0.23148148148148148" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/menu/menu_main.xml" value="0.15185185185185185" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/menu/menu_side_nav.xml" value="0.1" />
