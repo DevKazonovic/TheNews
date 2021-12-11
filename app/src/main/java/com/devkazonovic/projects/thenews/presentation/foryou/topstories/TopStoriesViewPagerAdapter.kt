@@ -1,17 +1,16 @@
-package com.devkazonovic.projects.thenews.presentation
+package com.devkazonovic.projects.thenews.presentation.foryou.topstories
 
-import android.app.Activity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.devkazonovic.projects.thenews.model.Story
 
-class TopStoriesViewPager(activity: FragmentActivity, private val stories : List<Story>)
-    : FragmentStateAdapter(activity) {
+class TopStoriesViewPagerAdapter(activity: FragmentActivity, private val stories: List<Story>) :
+    FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int = stories.size
 
     override fun createFragment(position: Int): Fragment {
-        return TopStoryFragment.newInstance(stories[position],position)
+        return TopStoryFragment.newInstance(stories[position], position)
     }
 }

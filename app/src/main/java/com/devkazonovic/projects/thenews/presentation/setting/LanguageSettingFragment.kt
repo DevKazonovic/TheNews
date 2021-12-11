@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation
+package com.devkazonovic.projects.thenews.presentation.setting
 
 import android.os.Bundle
 import android.view.LayoutInflater

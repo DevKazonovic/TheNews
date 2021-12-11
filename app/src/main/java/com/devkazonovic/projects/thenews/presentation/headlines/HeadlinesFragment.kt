@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation
+package com.devkazonovic.projects.thenews.presentation.headlines
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import com.devkazonovic.projects.thenews.R
 import com.devkazonovic.projects.thenews.common.extensions.setMainPageToolbar
 import com.devkazonovic.projects.thenews.databinding.FragmentHeadlinesBinding

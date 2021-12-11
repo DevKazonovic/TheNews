@@ -14,12 +14,15 @@ fun Toolbar.setUpNavigationGraph(navController: NavController) {
 }
 
 
-
-fun Toolbar.setMainPageToolbar(  navController: NavController,
-                                 drawerLayout:DrawerLayout){
-    val appBarConfiguration = AppBarConfiguration(setOf(
-        R.id.forYouPage, R.id.headlinesPage, R.id.searchPage, R.id.followingPage
-    ), drawerLayout)
+fun Toolbar.setMainPageToolbar(
+    navController: NavController,
+    drawerLayout: DrawerLayout
+) {
+    val appBarConfiguration = AppBarConfiguration(
+        setOf(
+            R.id.forYouPage, R.id.headlinesPage, R.id.searchPage, R.id.followingPage
+        ), drawerLayout
+    )
     this.setupWithNavController(navController, appBarConfiguration)
     this.setOnMenuItemClickListener { menuItem ->
         when (menuItem.itemId) {

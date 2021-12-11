@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation
+package com.devkazonovic.projects.thenews.presentation.following
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,33 +9,30 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import com.devkazonovic.projects.thenews.R
 import com.devkazonovic.projects.thenews.common.extensions.setMainPageToolbar
-import com.devkazonovic.projects.thenews.databinding.FragmentSearchBinding
+import com.devkazonovic.projects.thenews.databinding.FragmentFollowingBinding
 
 
-class SearchFragment : Fragment() {
+class FollowingFragment : Fragment() {
 
-
-    private var _binding: FragmentSearchBinding? = null
+    private var _binding: FragmentFollowingBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentFollowingBinding.inflate(inflater, container, false)
         val root = binding.root
-        navController = findNavController()
         root.let {
             toolbar = binding.topAppBar
             drawerLayout = requireActivity().findViewById(R.id.drawer_layout)
         }
+        navController = findNavController()
         toolbar.setMainPageToolbar(navController, drawerLayout)
         return root
     }
@@ -48,6 +45,6 @@ class SearchFragment : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance() = SearchFragment()
+        fun newInstance() = FollowingFragment()
     }
 }

@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation
+package com.devkazonovic.projects.thenews.presentation.foryou.topstories
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,28 +8,27 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.devkazonovic.projects.thenews.R
-import com.devkazonovic.projects.thenews.databinding.FragmentTopstoryBinding
+import com.devkazonovic.projects.thenews.databinding.ItemTopstoryBinding
 import com.devkazonovic.projects.thenews.model.Story
 
 
 private const val KEY_STORY = "Story Object"
 private const val KEY_STORY_POSITION = "Story Position In List"
 
-class TopStoryFragment : Fragment(){
+class TopStoryFragment : Fragment() {
 
-    private var _binding: FragmentTopstoryBinding? = null
+    private var _binding: ItemTopstoryBinding? = null
     private val binding get() = _binding!!
 
-    private var story : Story ?= null
-    private var pos : Int ?= null
+    private var story: Story? = null
+    private var pos: Int? = null
 
-    private lateinit var textViewSource : TextView
-    private lateinit var textViewTitle : TextView
-    private lateinit var textViewPublishedDate : TextView
+    private lateinit var textViewSource: TextView
+    private lateinit var textViewTitle: TextView
+    private lateinit var textViewPublishedDate: TextView
     private lateinit var imageViewArticleImg: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +44,7 @@ class TopStoryFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTopstoryBinding.inflate(inflater, container, false)
+        _binding = ItemTopstoryBinding.inflate(inflater, container, false)
         val root = binding.root
         binding.let {
             textViewSource = it.textViewSource
@@ -77,12 +76,12 @@ class TopStoryFragment : Fragment(){
         _binding = null
     }
 
-    companion object{
+    companion object {
         @JvmStatic
-        fun newInstance(story: Story,pos:Int) = TopStoryFragment().apply {
+        fun newInstance(story: Story, pos: Int) = TopStoryFragment().apply {
             arguments = Bundle().apply {
-                putSerializable(KEY_STORY,story)
-                putInt(KEY_STORY_POSITION,pos)
+                putSerializable(KEY_STORY, story)
+                putInt(KEY_STORY_POSITION, pos)
             }
         }
     }
