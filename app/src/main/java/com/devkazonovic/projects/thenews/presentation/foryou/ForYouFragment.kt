@@ -58,9 +58,7 @@ class ForYouFragment : Fragment() {
         val topStories = Dummy.stories
         setUpTopStoriesCarousel(topStories)
         setUpStoriesList(topStories)
-
     }
-
 
     private fun getViews() {
         binding.let {
