@@ -1,0 +1,24 @@
+<rss>
+    <channel>
+        <item>
+            <title>Title1</title>
+            <link>link1</link>
+            <pubDate>date1</pubDate>
+            <source url="url1">source1</source>
+        </item>
+
+        <item>
+            <title>Title1</title>
+            <link>link1</link>
+            <pubDate>date1</pubDate>
+            <source url="url1">source1</source>
+        </item>
+
+        <item>
+            <title>Title1</title>
+            <link>link1</link>
+            <pubDate>date1</pubDate>
+            <source url="url1">source1</source>
+        </item>
+    </channel>
+</rss>
