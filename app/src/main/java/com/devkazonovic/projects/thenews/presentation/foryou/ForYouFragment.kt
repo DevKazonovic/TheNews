@@ -22,6 +22,7 @@ import com.devkazonovic.projects.thenews.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
 import com.devkazonovic.projects.thenews.presentation.foryou.topstories.TopStoriesStateAdapter
 import com.devkazonovic.projects.thenews.presentation.foryou.topstories.TopStoriesViewPagerAdapter
+import timber.log.Timber
 
 
 class ForYouFragment : Fragment() {
@@ -57,6 +58,7 @@ class ForYouFragment : Fragment() {
         val topStories = Dummy.stories
         setUpTopStoriesCarousel(topStories)
         setUpStoriesList(topStories)
+
     }
 
 
@@ -94,7 +96,7 @@ class ForYouFragment : Fragment() {
 
     private fun setUpStoriesList(stories: List<Story>) {
         storiesListAdapter = StoriesListAdapter {
-            Log.d("TEST", "${it.id}")
+            Timber.d("${it.id}")
         }
         rvStories.layoutManager = LinearLayoutManager(requireContext())
         rvStories.adapter = storiesListAdapter

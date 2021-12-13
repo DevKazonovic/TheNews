@@ -26,8 +26,8 @@ class HeadlinesFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var vpHeadlines : ViewPager2
-    private lateinit var tabLayoutCategories : TabLayout
+    private lateinit var vpHeadlines: ViewPager2
+    private lateinit var tabLayoutCategories: TabLayout
 
     private lateinit var adapterVPCategories: CategoriesViewPagerAdapter
 
@@ -42,17 +42,28 @@ class HeadlinesFragment : Fragment() {
 
         adapterVPCategories = CategoriesViewPagerAdapter(
             requireActivity(),
-            listOf(HeadlineFragment.newInstance(), HeadlineFragment.newInstance(), HeadlineFragment.newInstance(), HeadlineFragment.newInstance(), HeadlineFragment.newInstance(), HeadlineFragment.newInstance(), HeadlineFragment.newInstance(), HeadlineFragment.newInstance(), HeadlineFragment.newInstance())
+            listOf(
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance(),
+                HeadlineFragment.newInstance()
+            )
         )
         vpHeadlines.adapter = adapterVPCategories
 
-        TabLayoutMediator(tabLayoutCategories, vpHeadlines){tab, position ->
-            tab.text = "TAB ${(position + 1)}" }.attach()
+        TabLayoutMediator(tabLayoutCategories, vpHeadlines) { tab, position ->
+            tab.text = "TAB ${(position + 1)}"
+        }.attach()
 
         return root
     }
 
-    private fun initViews(){
+    private fun initViews() {
         drawerLayout = requireActivity().findViewById(R.id.drawer_layout)
         binding.let {
             toolbar = it.topAppBar

@@ -17,32 +17,32 @@
                 style="@style/Widget.MaterialComponents.Toolbar.Surface"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:menu="@menu/menu_topbar"
                 app:navigationIcon="@drawable/ic_home_menu"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:title="Headlines"
                 app:titleCentered="true" />
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
-                app:tabMode="scrollable"
-                app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                app:tabTextColor="?attr/colorDisable"
-                app:tabSelectedTextColor="?attr/colorPrimary"
-                app:tabIndicator="@drawable/tab_indicator"
-                app:tabIndicatorGravity="bottom"
-                app:tabIndicatorFullWidth="false"
-                android:paddingBottom="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                android:paddingBottom="6dp"
+                app:tabIndicator="@drawable/tab_indicator"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorGravity="bottom"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="?attr/colorPrimary"
+                app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                app:tabTextColor="?attr/colorDisable" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vpHeadlines"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
