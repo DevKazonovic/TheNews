@@ -1,6 +1,7 @@
 package com.devkazonovic.projects.thenews.common.extensions
 
 import android.view.View
+import androidx.viewbinding.ViewBinding
 
 fun View.hide() {
     this.visibility = View.GONE
@@ -9,6 +10,15 @@ fun View.hide() {
 fun View.show() {
     this.visibility = View.VISIBLE
 }
+
+fun ViewBinding.hide() {
+    this.root.visibility = View.GONE
+}
+
+fun ViewBinding.show() {
+    this.root.visibility = View.VISIBLE
+}
+
 
 fun View.disable() {
     this.isEnabled = false

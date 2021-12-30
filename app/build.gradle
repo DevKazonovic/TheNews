@@ -42,6 +42,9 @@ android {
     testOptions {
         unitTests.includeAndroidResources = true
     }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 dependencies {
@@ -56,12 +59,13 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 
     implementation "androidx.room:room-runtime:$room_version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-rxjava3:$room_version"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofit_version"
@@ -82,6 +86,10 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-navigation-fragment:1.0.0"
+
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.3.1'
+
 
     //Logging
     implementation "com.jakewharton.timber:timber:4.7.1"
@@ -98,6 +106,10 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$arch_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
     testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    testImplementation "org.robolectric:robolectric:4.6.1"
+    testImplementation('org.threeten:threetenbp:1.5.1') {
+        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+    }
     kaptTest "com.google.dagger:hilt-compiler:$hilt_version"
 
     //Instrumented Test
@@ -107,6 +119,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.ext:truth:1.4.0'
     androidTestImplementation "com.google.truth:truth:1.1.3"
+    androidTestImplementation "androidx.arch.core:core-testing:$arch_version"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.9.3"
     debugImplementation "androidx.fragment:fragment-testing:$fragment_version"
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"

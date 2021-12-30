@@ -1,7 +1,46 @@
 <resources>
     <string name="app_name">TheNews</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="desc_article_image">Article Image</string>
     <string name="desc_topstory_image">TopStory Image</string>
+    <string name="hint_languagezone_search">Search</string>
+    <string name="hint_search">Search</string>
+    <string name="topic_world">World</string>
+    <string name="topic_entertainment">Entertainment</string>
+    <string name="topic_tech">Technology</string>
+    <string name="topic_sport">Sports</string>
+    <string name="topic_science">Science</string>
+    <string name="topic_health">Health</string>
+    <string name="topic_business">Business</string>
+    <string name="label_error_retry">Retry</string>
+    <string name="label_title_top5stories">Top 5 Stories</string>
+
+    <string name="error_unknown">UnKnown Error</string>
+    <string name="errors_title">Whooops!</string>
+    <string name="label_saved_stories">Saved Stories</string>
+    <string name="ego">ago</string>
+    <string name="label_save_for_later">Save for later</string>
+    <string name="label_share">Share</string>
+
+    <plurals name="year">
+        <item quantity="one"> %d year</item>
+        <item quantity="other"> %d years</item>
+    </plurals>
+    <plurals name="month">
+        <item quantity="one"> %d month</item>
+        <item quantity="other"> %d months</item>
+    </plurals>
+    <plurals name="day">
+        <item quantity="one"> %d day</item>
+        <item quantity="other"> %d days</item>
+    </plurals>
+    <plurals name="hour">
+        <item quantity="one"> %d hour</item>
+        <item quantity="other"> %d hours</item>
+    </plurals>
+    <plurals name="minute">
+        <item quantity="one"> %d minute</item>
+        <item quantity="other"> %d minutes</item>
+    </plurals>
+
 </resources>

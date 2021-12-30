@@ -7,17 +7,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.devkazonovic.projects.thenews.R
+import com.devkazonovic.projects.thenews.common.util.DateTimeUtil
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
 import com.devkazonovic.projects.thenews.databinding.ItemTopstoryBinding
-import com.devkazonovic.projects.thenews.model.Story
+import com.devkazonovic.projects.thenews.domain.model.Story
+import com.devkazonovic.projects.thenews.presentation.foryou.ForYouViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 private const val KEY_STORY = "Story Object"
 private const val KEY_STORY_POSITION = "Story Position In List"
 
+@AndroidEntryPoint
 class TopStoryFragment : Fragment() {
 
     private var _binding: ItemTopstoryBinding? = null
@@ -31,6 +38,12 @@ class TopStoryFragment : Fragment() {
     private lateinit var textViewPublishedDate: TextView
     private lateinit var imageViewArticleImg: ImageView
 
+    private val viewModel by
+    hiltNavGraphViewModels<ForYouViewModel>(R.id.forYouPage)
+
+    @Inject
+    lateinit var articleScrapper: ArticleScrapper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -40,40 +53,52 @@ class TopStoryFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = ItemTopstoryBinding.inflate(inflater, container, false)
-        val root = binding.root
+        initViews()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        story?.let {
+            val context = requireContext()
+            textViewSource.text = it.source.name
+            textViewTitle.text = it.title
+            textViewPublishedDate.text = DateTimeUtil.showTimePassed(context, it.howMuchAgo)
+            articleScrapper.getArticleImageUrl(it.url)
+                .subscribe(
+                    { imgUrl ->
+                        Glide.with(binding.root.context)
+                            .load(imgUrl)
+                            .placeholder(R.drawable.ic_grey)
+                            .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
+                            .into(imageViewArticleImg)
+                    },
+                    {
+                        Glide.with(binding.root.context)
+                            .load("")
+                            .placeholder(R.drawable.ic_grey)
+                            .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
+                            .into(imageViewArticleImg)
+                    }
+                )
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initViews() {
         binding.let {
             textViewSource = it.textViewSource
             textViewTitle = it.textViewTitle
             textViewPublishedDate = it.textViewPublishedDate
             imageViewArticleImg = it.imageViewArticleImg
         }
-
-        return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        story?.let {
-            textViewSource.text = it.source
-            textViewTitle.text = it.title
-            textViewPublishedDate.text = it.publishDate
-            Glide.with(this)
-                .load(it.imgUrl)
-                .placeholder(R.drawable.ic_placeholder)
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
-                .into(imageViewArticleImg)
-        }
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

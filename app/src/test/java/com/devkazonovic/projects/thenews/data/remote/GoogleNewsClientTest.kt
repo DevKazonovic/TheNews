@@ -1,9 +1,8 @@
 package com.devkazonovic.projects.thenews.data.remote
 
-import com.devkazonovic.projects.thenews.MyFactory
-import com.devkazonovic.projects.thenews.data.Item
-import com.devkazonovic.projects.thenews.data.Source
-import com.devkazonovic.projects.thenews.data.remote.help.GoogleNewsFeedMock
+import com.devkazonovic.projects.thenews.UnitTestFactory
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.GoogleNewsClient
+import com.devkazonovic.projects.thenews.testHelp.GoogleNewsFeedMock
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.mockwebserver.MockWebServer
@@ -16,15 +15,14 @@ class GoogleNewsClientTest {
 
     private lateinit var googleNewsClient: GoogleNewsClient
     private lateinit var mockWebServer: MockWebServer
-    private val item = Item("Title1", "link1", "date1", Source("url1", "source1"))
-
+    private val item = Item("Title1", "link1", "date1", ItemSource("url1", "source1"))
 
     @Before
     fun setUp() {
         mockWebServer = MockWebServer()
         mockWebServer.dispatcher = GoogleNewsFeedMock.mockDispatcher
         mockWebServer.start()
-        googleNewsClient = MyFactory.api(
+        googleNewsClient = UnitTestFactory.api(
             mockWebServer.url("/").toUrl().toString(),
             Schedulers.trampoline()
         ).create(GoogleNewsClient::class.java)
@@ -45,7 +43,7 @@ class GoogleNewsClientTest {
 
     @Test
     fun getTopicStories() {
-        googleNewsClient.getTopicStories(GoogleNewsFeedMock.ID_TECH)
+        googleNewsClient.getTopicStories(topicId = GoogleNewsFeedMock.ID_TECH)
             .test()
             .assertValue { rss ->
                 assertThat(rss).isNotNull()
@@ -58,7 +56,7 @@ class GoogleNewsClientTest {
 
     @Test
     fun getSearch() {
-        googleNewsClient.search("tech")
+        googleNewsClient.search(keyword = "tech")
             .test()
             .assertValue { rss ->
                 assertThat(rss).isNotNull()

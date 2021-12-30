@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,7 +23,7 @@
                 app:navigationIcon="@drawable/ic_home_menu">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textField"
+                    android:id="@+id/tfSearch"
                     style="@style/Widget.App.Toolbar.SearchView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,7 +37,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:clipToPadding="true"
-                        android:hint="Search"
+                        android:hint="@string/hint_search"
                         android:inputType="text"
                         android:padding="8dp"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
@@ -46,7 +47,14 @@
 
 
         </com.google.android.material.appbar.AppBarLayout>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchStories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            tools:listitem="@layout/item_story" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>
