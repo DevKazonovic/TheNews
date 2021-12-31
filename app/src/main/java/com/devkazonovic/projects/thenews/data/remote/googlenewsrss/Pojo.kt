@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.data.remote
+package com.devkazonovic.projects.thenews.data.remote.googlenewsrss
 
 import org.simpleframework.xml.*
 import java.io.Serializable

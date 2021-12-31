@@ -1,5 +1,6 @@
 package com.devkazonovic.projects.thenews.domain.mapper
 
+import com.devkazonovic.projects.thenews.UnitTestFactory
 import com.devkazonovic.projects.thenews.testHelp.DummyUtil
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
@@ -11,7 +12,7 @@ class EntityMapperTest {
 
     @Before
     fun setUp() {
-        mappers = MapperFactory()
+        mappers = UnitTestFactory.mapper
     }
 
     @Test

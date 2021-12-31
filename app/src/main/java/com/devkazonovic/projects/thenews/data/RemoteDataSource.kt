@@ -1,7 +1,7 @@
 package com.devkazonovic.projects.thenews.data
 
-import com.devkazonovic.projects.thenews.data.remote.Item
-import com.devkazonovic.projects.thenews.data.remote.RSS
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.RSS
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.GoogleNewsClient
 import com.devkazonovic.projects.thenews.domain.mapper.Mappers
 import com.devkazonovic.projects.thenews.domain.model.LanguageZone

@@ -38,7 +38,7 @@ class StoriesListAdapter(
                 it.textViewArticleSource.text = story.source.name
                 it.textViewArticleTitle.text = story.title
                 it.textViewArticlePublishDate.text =
-                    DateTimeUtil.showTimePassed(context, story.howMuchAgo)
+                    DateTimeUtil.showTimePassed(context, story.publishDateFormat)
                 articleScrapper.getArticleImageUrl(story.url).subscribe(
                     { imgUrl ->
                         Glide.with(context)

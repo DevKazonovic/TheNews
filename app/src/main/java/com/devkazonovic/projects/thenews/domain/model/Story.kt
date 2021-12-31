@@ -8,7 +8,7 @@ data class Story(
     val title: String,
     val source: Source,
     val publishDate: String = "",
-    val howMuchAgo: Pair<Int,Ago> = Pair(0,Ago.NON),
+    val publishDateFormat: Pair<Int,Ago> = Pair(0,Ago.NON),
     val imgUrl: String = "",
     val description: String = "",
     val author: String = ""
@@ -28,5 +28,6 @@ data class Story(
             }
 
         }
+
     }
 }

@@ -1,7 +1,8 @@
 package com.devkazonovic.projects.thenews.domain.mapper
 
-import com.devkazonovic.projects.thenews.data.remote.Item
-import com.devkazonovic.projects.thenews.data.remote.ItemSource
+import com.devkazonovic.projects.thenews.UnitTestFactory
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
 import com.devkazonovic.projects.thenews.domain.model.Source
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.service.DateTimeFormatter
@@ -16,16 +17,7 @@ class XmlMapperTest {
 
     @Before
     fun setUp() {
-        mappers = MapperFactory(
-            storyXmlDataModel = StoryXmlDataModel(DateTimeFormatter(clock = Clock.systemUTC())),
-            sourceXmlDataModel = SourceXmlDataModel(),
-            storyEntityDataModel = StoryEntityDataModel(),
-            savedStoryEntityDataModel = SavedStoryEntityDataModel(),
-            sourceEntityDataModel = SourceEntityDataModel(),
-            storyDataModelEntity = StoryDataModelEntity(),
-            savedStoryDataModelEntity = SavedStoryDataModelEntity(),
-            sourceDataModelEntity = SourceDataModelEntity()
-        )
+        mappers = UnitTestFactory.mapper
     }
 
     @Test

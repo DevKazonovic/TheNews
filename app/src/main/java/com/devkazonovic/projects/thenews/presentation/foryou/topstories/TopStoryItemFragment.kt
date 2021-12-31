@@ -66,7 +66,7 @@ class TopStoryFragment : Fragment() {
             val context = requireContext()
             textViewSource.text = it.source.name
             textViewTitle.text = it.title
-            textViewPublishedDate.text = DateTimeUtil.showTimePassed(context, it.howMuchAgo)
+            textViewPublishedDate.text = DateTimeUtil.showTimePassed(context, it.publishDateFormat)
             articleScrapper.getArticleImageUrl(it.url)
                 .subscribe(
                     { imgUrl ->

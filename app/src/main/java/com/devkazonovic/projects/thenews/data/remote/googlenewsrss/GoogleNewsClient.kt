@@ -1,6 +1,5 @@
 package com.devkazonovic.projects.thenews.data.remote.googlenewsrss
 
-import com.devkazonovic.projects.thenews.data.remote.RSS
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

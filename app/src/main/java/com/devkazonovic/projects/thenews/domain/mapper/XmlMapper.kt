@@ -2,8 +2,8 @@ package com.devkazonovic.projects.thenews.domain.mapper
 
 import com.devkazonovic.projects.thenews.data.local.database.entity.T_Source
 import com.devkazonovic.projects.thenews.data.local.database.entity.T_Story
-import com.devkazonovic.projects.thenews.data.remote.Item
-import com.devkazonovic.projects.thenews.data.remote.ItemSource
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
 import com.devkazonovic.projects.thenews.domain.model.Ago
 import com.devkazonovic.projects.thenews.domain.model.Source
 import com.devkazonovic.projects.thenews.domain.model.Story
@@ -22,7 +22,7 @@ class StoryXmlDataModel @Inject constructor(
                 source = SourceXmlDataModel().map(input.itemSource),
                 title = input.title ?: "",
                 publishDate = input.pubDate?:"",
-                howMuchAgo = input.pubDate?.let {
+                publishDateFormat = input.pubDate?.let {
                     dateTimeFormatter.howMuchAgo(it)
                 }?: Pair(0,Ago.NON)
             )
@@ -67,3 +67,5 @@ class SourceXmlEntity @Inject constructor() : Mapper<ItemSource, T_Source> {
         } ?: T_Story.NO_SOURCE
     }
 }
+
+

@@ -2,6 +2,8 @@ package com.devkazonovic.projects.thenews.data.remote
 
 import com.devkazonovic.projects.thenews.UnitTestFactory
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.GoogleNewsClient
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
 import com.devkazonovic.projects.thenews.testHelp.GoogleNewsFeedMock
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.schedulers.Schedulers

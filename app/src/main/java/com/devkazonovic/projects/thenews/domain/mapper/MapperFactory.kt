@@ -8,7 +8,6 @@ interface Mappers {
     fun storyEntityDataModel(): StoryEntityDataModel
     fun savedStoryEntityDataModel(): SavedStoryEntityDataModel
     fun sourceEntityDataModel(): SourceEntityDataModel
-
     fun storyDataModelEntity(): StoryDataModelEntity
     fun savedStoryDataModelEntity(): SavedStoryDataModelEntity
     fun sourceDataModelEntity(): SourceDataModelEntity
@@ -16,13 +15,13 @@ interface Mappers {
 }
 
 class MapperFactory @Inject constructor(
-    private val storyXmlDataModel : StoryXmlDataModel,
-    private val sourceXmlDataModel : SourceXmlDataModel,
-    private val storyEntityDataModel : StoryEntityDataModel,
-    private val savedStoryEntityDataModel : SavedStoryEntityDataModel,
-    private val sourceEntityDataModel : SourceEntityDataModel,
-    private val storyDataModelEntity : StoryDataModelEntity,
-    private val savedStoryDataModelEntity : SavedStoryDataModelEntity,
+    private val storyXmlDataModel: StoryXmlDataModel,
+    private val sourceXmlDataModel: SourceXmlDataModel,
+    private val storyEntityDataModel: StoryEntityDataModel,
+    private val savedStoryEntityDataModel: SavedStoryEntityDataModel,
+    private val sourceEntityDataModel: SourceEntityDataModel,
+    private val storyDataModelEntity: StoryDataModelEntity,
+    private val savedStoryDataModelEntity: SavedStoryDataModelEntity,
     private val sourceDataModelEntity: SourceDataModelEntity
 
 ) : Mappers {
