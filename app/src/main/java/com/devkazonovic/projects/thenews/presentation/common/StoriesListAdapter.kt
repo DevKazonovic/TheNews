@@ -43,7 +43,6 @@ class StoriesListAdapter(
             binding.let {
                 it.root.setOnClickListener { onClick(story) }
                 it.icStoryMenu.setOnClickListener { onMenuClick(story) }
-                it.imageViewArticleImg.setImageDrawable(null)
                 it.textViewArticleSource.text = story.source.name
                 it.textViewArticleTitle.text = story.title
                 it.textViewArticlePublishDate.text = showTimePassed(context, story.publishDateFormat)
@@ -52,7 +51,7 @@ class StoriesListAdapter(
                     .subscribe { imgUrl ->
                         Glide.with(binding.root.context)
                             .load(imgUrl)
-                            .placeholder(R.drawable.ic_grey)
+                            .placeholder(R.drawable.ic_placeholder)
                             .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
                             .into(it.imageViewArticleImg)
                     }.addTo(dispose)

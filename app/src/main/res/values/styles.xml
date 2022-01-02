@@ -53,4 +53,10 @@
         <item name="android:padding">16dp</item>
     </style>
 
+
+    <!--Text Apperance-->
+    <style name="TextAppearance.MaterialComponents.Caption.Bold" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

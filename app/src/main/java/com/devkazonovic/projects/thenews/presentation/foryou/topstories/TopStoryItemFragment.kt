@@ -70,7 +70,7 @@ class TopStoryFragment : Fragment() {
                 .subscribe { imgUrl ->
                     Glide.with(imageViewArticleImg.context)
                         .load(imgUrl)
-                        .placeholder(R.drawable.ic_grey)
+                        .placeholder(R.drawable.ic_placeholder)
                         .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
                         .into(imageViewArticleImg)
                 }

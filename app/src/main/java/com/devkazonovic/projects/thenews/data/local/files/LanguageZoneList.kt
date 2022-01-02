@@ -34,6 +34,6 @@ class LanguageZoneList @Inject constructor(
 
             if (ceid != null && label != null) LanguageZone(ceid[0], ceid[1], label)
             else LanguageZone.DEFAULT
-        }
+        }.sortedBy { it.name }
     }
 }

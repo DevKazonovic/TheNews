@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -27,6 +28,7 @@ class LanguageSettingFragment : Fragment() {
     private var _binding: FragmentLanguageSettingBinding? = null
     private val binding get() = _binding!!
     private lateinit var toolbar: Toolbar
+    private lateinit var rbCurrentSelectedOption : TextView
     private lateinit var radioGroupList: RadioGroup
     private lateinit var tfSearch: TextInputLayout
 
@@ -51,6 +53,9 @@ class LanguageSettingFragment : Fragment() {
         viewModel.languageZoneList.observe(viewLifecycleOwner) {
             onSuccess(it)
         }
+        viewModel.currentSelectedLanguage.observe(viewLifecycleOwner){
+            rbCurrentSelectedOption.text = it.name
+        }
 
     }
 
@@ -60,9 +65,12 @@ class LanguageSettingFragment : Fragment() {
     }
 
     private fun initViews() {
-        toolbar = binding.topAppBar
-        radioGroupList = binding.radioGroupList
-        tfSearch = binding.tfSearch
+        binding.let {
+            toolbar = it.topAppBar
+            radioGroupList = it.radioGroupList
+            rbCurrentSelectedOption = it.rbCurrentSelectedOption
+            tfSearch = it.tfSearch
+        }
     }
 
     private fun onSuccess(list: List<LanguageZone>) {
@@ -88,9 +96,6 @@ class LanguageSettingFragment : Fragment() {
                             )
                         )
                     }
-                    if (list[i].getCeId() == viewModel.getCurrentLanguageZone()) {
-                        isChecked = true
-                    }
                 }, layoutParams)
             }
 
@@ -99,10 +104,9 @@ class LanguageSettingFragment : Fragment() {
                 if (checkedRadioButton != null) {
                     val isChecked = checkedRadioButton.isChecked
                     if (isChecked) {
-                        viewModel.onLanguageZoneSelected(list[checkedId].getCeId())
+                        viewModel.onLanguageZoneSelected(list[checkedId])
                     }
                 }
-
             }
         }
     }

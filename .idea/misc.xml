@@ -10,6 +10,7 @@
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_bookmarked.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_externallink.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_foryou.xml" value="0.2722222222222222" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_grey.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_headlines.xml" value="0.2722222222222222" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_home_menu.xml" value="0.2722222222222222" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/drawable/ic_item_menu.xml" value="0.2722222222222222" />
@@ -26,17 +27,17 @@
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/error_layout.xml" value="0.25" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_blank.xml" value="0.19270833333333334" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_following.xml" value="0.19270833333333334" />
-        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_foryou.xml" value="0.25" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_foryou.xml" value="0.20265458077047588" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_headline.xml" value="0.1" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_headlines.xml" value="0.19270833333333334" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_language_setting.xml" value="0.25" />
-        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_search.xml" value="0.33" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_search.xml" value="0.25280898876404495" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/fragment_topstory.xml" value="0.2282958199356913" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_circle.xml" value="0.8452380952380952" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_languagezone.xml" value="0.33" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_savedstory.xml" value="0.22" />
-        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_story.xml" value="0.25" />
-        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_topstory.xml" value="0.19270833333333334" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_story.xml" value="0.5" />
+        <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/item_topstory.xml" value="0.2" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/layout_menu_story.xml" value="0.20092592592592592" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/load_layout.xml" value="0.19270833333333334" />
         <entry key="..\:/Users/hp/Projects/AndroidStudioProjects/MyProjects/TheNews/app/src/main/res/layout/menu_st.xml" value="0.19270833333333334" />

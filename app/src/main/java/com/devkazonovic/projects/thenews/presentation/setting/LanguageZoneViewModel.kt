@@ -15,18 +15,21 @@ class LanguageZoneViewModel @Inject constructor(
     private val sharedPreferences: LocalKeyValue
 ) : ViewModel() {
 
+    private val _currentSelectedLanguage = MutableLiveData<LanguageZone>()
     private val _languageZoneList = MutableLiveData<List<LanguageZone>>()
 
     fun showList() {
-        _languageZoneList.postValue(listProvider.getList())
+        val list = listProvider.getList()
+        val currentSelected = list.findLast { it.getCeId()==sharedPreferences.getLanguageZone() }
+        _currentSelectedLanguage.value = currentSelected ?: LanguageZone.DEFAULT
+        _languageZoneList.postValue(list.toMutableList().apply { remove(currentSelected)})
     }
 
-    fun onLanguageZoneSelected(cied: String) {
-        sharedPreferences.saveLanguageZone(cied)
-    }
+    fun onLanguageZoneSelected(languageZone: LanguageZone) {
+        if(sharedPreferences.saveLanguageZone(languageZone.getCeId())){
+            showList()
+        }
 
-    fun getCurrentLanguageZone(): String {
-        return sharedPreferences.getLanguageZone()
     }
 
     fun searchForLanguageZone(input: String) {
@@ -40,4 +43,5 @@ class LanguageZoneViewModel @Inject constructor(
     }
 
     val languageZoneList: LiveData<List<LanguageZone>> get() = _languageZoneList
+    val currentSelectedLanguage : LiveData<LanguageZone> get() = _currentSelectedLanguage
 }

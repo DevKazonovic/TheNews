@@ -14,10 +14,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devkazonovic.projects.thenews.R
+import com.devkazonovic.projects.thenews.common.extensions.hide
 import com.devkazonovic.projects.thenews.common.extensions.setMainPageToolbar
+import com.devkazonovic.projects.thenews.common.extensions.show
+import com.devkazonovic.projects.thenews.common.util.ViewUtil
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
 import com.devkazonovic.projects.thenews.databinding.FragmentSearchBinding
+import com.devkazonovic.projects.thenews.databinding.LayoutErrorBinding
+import com.devkazonovic.projects.thenews.databinding.LayoutLoadingBinding
 import com.devkazonovic.projects.thenews.domain.model.Resource
+import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,12 +33,14 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
-
     private val viewModel
             by hiltNavGraphViewModels<SearchViewModel>(R.id.searchPage)
 
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var layoutData: ViewGroup
+    private lateinit var layoutLoad: LayoutLoadingBinding
+    private lateinit var layoutError: LayoutErrorBinding
     private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -65,13 +73,13 @@ class SearchFragment : Fragment() {
         viewModel.result.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    storiesListAdapter.submitList(it.data)
+                    onSuccess(it.data)
                 }
                 is Resource.Error -> {
-                    storiesListAdapter.submitList(listOf())
+                    onError(getString(it.messageId))
                 }
                 is Resource.Loading -> {
-                    storiesListAdapter.submitList(listOf())
+                    onLoading()
                 }
             }
         }
@@ -83,12 +91,15 @@ class SearchFragment : Fragment() {
     }
 
     private fun initViews() {
+        drawerLayout = requireActivity().findViewById(R.id.drawer_layout)
         binding.let {
             toolbar = it.topAppBar
+            layoutData = it.layoutData
+            layoutLoad = it.layoutLoad
+            layoutError = it.layoutError
             rvSearchStory = it.rvSearchStories
             tfSearch = it.tfSearch
         }
-        drawerLayout = requireActivity().findViewById(R.id.drawer_layout)
     }
 
     private fun initStoriesList() {
@@ -97,6 +108,30 @@ class SearchFragment : Fragment() {
         }, {})
         rvSearchStory.layoutManager = LinearLayoutManager(requireContext())
         rvSearchStory.adapter = storiesListAdapter
+    }
+
+    private fun onLoading() {
+        ViewUtil.hide(layoutData)
+        layoutError.hide()
+        layoutLoad.show()
+    }
+
+    private fun onSuccess(stories: List<Story>?) {
+        ViewUtil.hide(layoutError, layoutLoad)
+        ViewUtil.show(layoutData)
+        stories?.let {
+            if (it.isNotEmpty()) {
+                storiesListAdapter.submitList(it)
+            }
+        }
+    }
+
+    private fun onError(description: String) {
+        ViewUtil.hide(layoutData)
+        ViewUtil.hide(layoutLoad)
+        layoutError.show()
+        layoutError.txTitle.text = getString(R.string.errors_title)
+        layoutError.txSubtitle.text = description
     }
 
     companion object {

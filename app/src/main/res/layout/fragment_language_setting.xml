@@ -36,6 +36,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/rbCurrentSelectedOption"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    tools:text="France(Maroc)"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:drawablePadding="16dp"
+                    android:gravity="center_vertical"
+                    app:drawableLeftCompat="@drawable/ic_language_setting" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tfSearch"
                     style="@style/Widget.App.Input.SearchView"

@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="0dp"
-    app:cardElevation="0dp">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,25 +15,24 @@
             android:id="@+id/textViewArticleSource"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_marginBottom="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption.Bold"
             app:layout_constraintBottom_toTopOf="@+id/textViewArticleTitle"
             app:layout_constraintEnd_toStartOf="@+id/materialCardView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/materialCardView"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="TextViewTextViewTextViewTextViewTextViewTextViewTextView" />
 
         <TextView
             android:id="@+id/textViewArticleTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="4"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toStartOf="@+id/materialCardView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewArticleSource"
@@ -45,14 +42,12 @@
             android:id="@+id/materialCardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardPreventCornerOverlap="true"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="@+id/textViewArticleSource"
+            app:layout_constraintVertical_bias="0.0">
 
             <ImageView
                 android:id="@+id/imageViewArticleImg"
@@ -61,15 +56,13 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/desc_article_image"
                 android:scaleType="centerCrop"
-                tools:srcCompat="@drawable/ic_grey" />
+                app:srcCompat="@drawable/ic_placeholder" />
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
