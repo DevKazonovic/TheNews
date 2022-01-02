@@ -4,13 +4,12 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
-import java.util.*
 
 @Entity(tableName = "story")
-data class T_Story(
+data class StoryEntity(
     val url: String,
     val title: String,
-    @Embedded val source: T_Source,
+    @Embedded val sourceEntity: SourceEntity,
     val topicId: String? = null,
     val imgUrl: String = "",
     val publishDate: String = "",
@@ -24,15 +23,9 @@ data class T_Story(
     companion object {
         const val NO_SOURCE_VALUE = "NON"
         val NO_SOURCE =
-            T_Source(id = NO_SOURCE_VALUE, name = NO_SOURCE_VALUE, url = NO_SOURCE_VALUE)
-        val EMPTY = T_Story(url = "", source = NO_SOURCE, title = "", publishDate = "")
-        fun createSourceId(name: String?): String {
-            return name?.let {
-                StringBuilder().append(name.replace(" ", "_").trim()).append(
-                    UUID.randomUUID().toString()
-                ).toString()
-            } ?: NO_SOURCE_VALUE
-        }
+            SourceEntity(id = NO_SOURCE_VALUE, name = NO_SOURCE_VALUE, url = NO_SOURCE_VALUE)
+        val EMPTY = StoryEntity(url = "", sourceEntity = NO_SOURCE, title = "", publishDate = "")
+
     }
 }
 

@@ -21,6 +21,9 @@
     <string name="ego">ago</string>
     <string name="label_save_for_later">Save for later</string>
     <string name="label_share">Share</string>
+    <string name="label_remove_story">Remove from saved stories</string>
+    <string name="label_share_story">Share</string>
+    <string name="label_open_storySource">Open source web site</string>
 
     <plurals name="year">
         <item quantity="one"> %d year</item>

@@ -1,7 +1,7 @@
 package com.devkazonovic.projects.thenews.data.local.database.dao
 
 import androidx.room.*
-import com.devkazonovic.projects.thenews.data.local.database.entity.T_SavedStory
+import com.devkazonovic.projects.thenews.data.local.database.entity.SavedStoryEntity
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 
@@ -9,12 +9,12 @@ import io.reactivex.rxjava3.core.Flowable
 abstract class ReadLaterDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(vararg savedStory: T_SavedStory): Completable
+    abstract fun insert(vararg savedStoryEntity: SavedStoryEntity): Completable
 
     @Delete
-    abstract fun delete(vararg savedStory: T_SavedStory): Completable
+    abstract fun delete(vararg savedStoryEntity: SavedStoryEntity): Completable
 
     @Query("SELECT * From readlater")
-    abstract fun findAll(): Flowable<List<T_SavedStory>>
+    abstract fun findAll(): Flowable<List<SavedStoryEntity>>
 
 }

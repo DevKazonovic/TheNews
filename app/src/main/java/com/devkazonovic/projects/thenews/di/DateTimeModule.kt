@@ -11,7 +11,7 @@ import org.threeten.bp.Clock
 object DateTimeModule {
 
     @Provides
-    fun provideClock() : Clock{
+    fun provideClock(): Clock {
         return Clock.systemUTC()
     }
 

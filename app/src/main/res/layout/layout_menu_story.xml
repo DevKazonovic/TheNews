@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/view_bg_rounded_top_corners_12"
@@ -20,8 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_bookmark"
-            />
+            app:srcCompat="@drawable/ic_bookmark" />
 
         <TextView
             android:id="@+id/textViewSaveStory"
@@ -46,17 +44,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_share"
             android:layout_marginEnd="16dp"
-            />
+            app:srcCompat="@drawable/ic_share" />
 
         <TextView
-                android:id="@+id/textViewShareStory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/label_save_for_later"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+            android:id="@+id/textViewShareStory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/label_share_story"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
 
     </LinearLayout>
@@ -73,16 +70,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_open_in_new"
             android:layout_marginEnd="16dp"
-            />
+            app:srcCompat="@drawable/ic_open_in_new" />
 
         <TextView
             android:id="@+id/textViewOpenSource"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/label_save_for_later"
+            android:text="@string/label_open_storySource"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
 
 

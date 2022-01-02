@@ -92,9 +92,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun initStoriesList() {
-        storiesListAdapter = StoriesListAdapter(articleScrapper) {
+        storiesListAdapter = StoriesListAdapter(requireContext(),articleScrapper, {
             Timber.d(it.url)
-        }
+        }, {})
         rvSearchStory.layoutManager = LinearLayoutManager(requireContext())
         rvSearchStory.adapter = storiesListAdapter
     }

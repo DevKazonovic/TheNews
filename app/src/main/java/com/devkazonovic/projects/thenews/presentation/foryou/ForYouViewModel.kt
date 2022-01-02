@@ -24,10 +24,9 @@ class ForYouViewModel @Inject constructor(
     private val _stories = MutableLiveData<Resource<List<Story>>>()
 
     fun loadData() {
-        _stories.postValue(Resource.Loading())
+        _stories.value = Resource.Loading()
         ceid = localKeyValue.getLanguageZone()
         mainRepository.getStories(ceid)
-            .subscribeOn(schedulers.ioScheduler())
             .observeOn(schedulers.uiScheduler())
             .subscribe { resource -> _stories.postValue(resource) }
     }

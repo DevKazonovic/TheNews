@@ -5,8 +5,8 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.devkazonovic.projects.thenews.AndroidTestFactory.getMainDataBase
 import com.devkazonovic.projects.thenews.data.local.database.dao.StoriesDao
-import com.devkazonovic.projects.thenews.data.local.database.entity.T_Source
-import com.devkazonovic.projects.thenews.data.local.database.entity.T_Story
+import com.devkazonovic.projects.thenews.data.local.database.entity.SourceEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
@@ -16,11 +16,11 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import timber.log.Timber
 
-private val source1 = T_Source("source1", "Source1", "source_url1")
-private val source2 = T_Source("source2", "Source2", "source_url2")
+private val source1 = SourceEntity("source1", "Source1", "source_url1")
+private val source2 = SourceEntity("source2", "Source2", "source_url2")
 
-private val story1 = T_Story("url1", "title1", source = source1, "topic1")
-private val story2 = T_Story("url2", "title2", source = source2, "topic2")
+private val story1 = StoryEntity("url1", "title1", sourceEntity = source1, "topic1")
+private val story2 = StoryEntity("url2", "title2", sourceEntity = source2, "topic2")
 
 @RunWith(AndroidJUnit4::class)
 class StoriesDaoTest {

@@ -1,9 +1,13 @@
 package com.devkazonovic.projects.thenews.service
 
 import com.devkazonovic.projects.thenews.domain.model.Ago
+import com.devkazonovic.projects.thenews.testHelp.DateUtil
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import org.threeten.bp.*
+import org.threeten.bp.Clock
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneOffset
+import org.threeten.bp.ZonedDateTime
 
 class DateTimeUtilTest {
 
@@ -13,7 +17,7 @@ class DateTimeUtilTest {
 
     @Test
     fun getHowMuchTimePassed() {
-        dateTimeFormatter = DateTimeFormatter()
+        dateTimeFormatter = DateTimeFormatter(Clock.systemUTC())
         val actualInstance =
             dateTimeFormatter.getHowMuchTimePassed("Sun, 19 Dec 2021 11:40:00 GMT")
         val expected = Instant.ofEpochMilli(1639914000000L)
@@ -21,10 +25,9 @@ class DateTimeUtilTest {
     }
 
     @Test
-    fun test_YearsAgo(){
+    fun test_YearsAgo() {
         //Given
-        val newDate =
-            ZonedDateTime.of(2022,1,1,0,0,0,0,ZoneOffset.UTC).toInstant()
+        val newDate = DateUtil.get2022_01_1()
         val oldDate = "Sun, 19 Dec 2021 00:00:00 GMT"
         dateTimeFormatter = DateTimeFormatter(Clock.fixed(newDate, ZoneOffset.UTC))
 
@@ -38,10 +41,12 @@ class DateTimeUtilTest {
     }
 
     @Test
-    fun test_MonthsAgo(){
+    fun test_MonthsAgo() {
         //Given
         val newDate =
-            ZonedDateTime.of(2021,2,1,0,0,0,0,ZoneOffset.UTC).toInstant()
+            ZonedDateTime.of(
+                2021, 2, 1, 0, 0, 0, 0, ZoneOffset.UTC
+            ).toInstant()
         val oldDate = "Sun, 19 Jan 2021 00:00:00 GMT"
         dateTimeFormatter = DateTimeFormatter(Clock.fixed(newDate, ZoneOffset.UTC))
 
@@ -55,10 +60,10 @@ class DateTimeUtilTest {
     }
 
     @Test
-    fun test_DaysAgo(){
+    fun test_DaysAgo() {
         //Given
         val newDate =
-            ZonedDateTime.of(2021,1,20,0,0,0,0,ZoneOffset.UTC).toInstant()
+            ZonedDateTime.of(2021, 1, 20, 0, 0, 0, 0, ZoneOffset.UTC).toInstant()
         val oldDate = "Sun, 19 Jan 2021 00:00:00 GMT"
         dateTimeFormatter = DateTimeFormatter(Clock.fixed(newDate, ZoneOffset.UTC))
 
@@ -72,10 +77,10 @@ class DateTimeUtilTest {
     }
 
     @Test
-    fun test_HoursAgo(){
+    fun test_HoursAgo() {
         //Given
         val newDate =
-            ZonedDateTime.of(2021,12,20,11,0,0,0,ZoneOffset.UTC).toInstant()
+            ZonedDateTime.of(2021, 12, 20, 11, 0, 0, 0, ZoneOffset.UTC).toInstant()
         val oldDate = "Sun, 20 Dec 2021 10:00:00 GMT"
         dateTimeFormatter = DateTimeFormatter(Clock.fixed(newDate, ZoneOffset.UTC))
 
@@ -89,10 +94,10 @@ class DateTimeUtilTest {
     }
 
     @Test
-    fun test_MinutesAgo(){
+    fun test_MinutesAgo() {
         //Given
         val newDate =
-            ZonedDateTime.of(2021,12,20,10,20,0,0,ZoneOffset.UTC).toInstant()
+            ZonedDateTime.of(2021, 12, 20, 10, 20, 0, 0, ZoneOffset.UTC).toInstant()
         val oldDate = "Sun, 20 Dec 2021 10:19:00 GMT"
         dateTimeFormatter = DateTimeFormatter(Clock.fixed(newDate, ZoneOffset.UTC))
         println(newDate)

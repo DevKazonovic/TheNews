@@ -7,13 +7,20 @@ import com.devkazonovic.projects.thenews.domain.model.Story
 
 class TopStoriesViewPagerAdapter(
     activity: FragmentActivity,
-    private val stories: List<Story>
+    private val stories: List<Story> = listOf()
 ) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int = stories.size
 
     override fun createFragment(position: Int): Fragment {
         return TopStoryFragment.newInstance(stories[position], position)
+    }
+
+    fun setList(stories: List<Story>){
+        stories.toMutableList().apply {
+            clear()
+            addAll(stories)
+        }
     }
 
 }

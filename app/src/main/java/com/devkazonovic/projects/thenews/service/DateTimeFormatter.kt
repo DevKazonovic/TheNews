@@ -37,7 +37,7 @@ class DateTimeFormatter @Inject constructor(
         ).toInstant()
     }
 
-    fun howMuchAgo(dateGoogleRssFormat: String) : Pair<Int,Ago>{
+    fun howMuchAgo(dateGoogleRssFormat: String): Pair<Int, Ago> {
         val publishedDateInstant = getHowMuchTimePassed(dateGoogleRssFormat)
         val currentDateInstant = Instant.now(clock)
 
@@ -56,12 +56,12 @@ class DateTimeFormatter @Inject constructor(
         val minuteDiff = currentLocalTime.minute - publishedLocalTime.minute
 
         return when {
-            yearDiff>0 -> Pair(yearDiff,Ago.YEAR)
-            monthDiff>0 -> Pair(monthDiff,Ago.MONTH)
-            dayDiff>0 -> Pair(dayDiff,Ago.DAY)
-            hourDiff>0 -> Pair(hourDiff,Ago.HOUR)
-            minuteDiff>0 -> Pair(minuteDiff,Ago.MINUTE)
-            else -> Pair(0,Ago.NON)
+            yearDiff > 0 -> Pair(yearDiff, Ago.YEAR)
+            monthDiff > 0 -> Pair(monthDiff, Ago.MONTH)
+            dayDiff > 0 -> Pair(dayDiff, Ago.DAY)
+            hourDiff > 0 -> Pair(hourDiff, Ago.HOUR)
+            minuteDiff > 0 -> Pair(minuteDiff, Ago.MINUTE)
+            else -> Pair(0, Ago.NON)
         }
     }
 }

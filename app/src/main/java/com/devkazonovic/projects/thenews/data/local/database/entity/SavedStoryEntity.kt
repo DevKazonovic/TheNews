@@ -7,10 +7,10 @@ import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = "readlater")
-data class T_SavedStory(
+data class SavedStoryEntity(
     val url: String,
     val title: String,
-    @Embedded val source: T_Source,
+    @Embedded val sourceEntity: SourceEntity,
     val topicId: String? = null,
     val imgUrl: String = "",
     val publishDate: String = "",
@@ -23,8 +23,10 @@ data class T_SavedStory(
     companion object {
         const val NO_SOURCE_VALUE = "NON"
         val NO_SOURCE =
-            T_Source(id = NO_SOURCE_VALUE, name = NO_SOURCE_VALUE, url = NO_SOURCE_VALUE)
-        val EMPTY = T_SavedStory(url = "", source = NO_SOURCE, title = "", publishDate = "")
+            SourceEntity(id = NO_SOURCE_VALUE, name = NO_SOURCE_VALUE, url = NO_SOURCE_VALUE)
+        val EMPTY =
+            SavedStoryEntity(url = "", sourceEntity = NO_SOURCE, title = "", publishDate = "")
+
         fun createSourceId(name: String?): String {
             return name?.let {
                 StringBuilder().append(name.replace(" ", "_").trim()).append(

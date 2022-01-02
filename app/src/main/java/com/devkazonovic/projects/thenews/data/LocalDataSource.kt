@@ -12,22 +12,20 @@ class LocalDataSource @Inject constructor(
     private val mappers: Mappers
 ) {
 
-    //Todo: Add CRUD Operations & Test it and then test Repository
-
     private val readLaterDao = mainDataBase.readLaterDao()
 
     fun saveStoryToReadLater(story: Story): Completable {
-        return readLaterDao.insert(mappers.savedStoryDataModelEntity().map(story))
+        return readLaterDao.insert(mappers.domainModelMappers().savedStoryModelMapper.toEntity(story))
     }
 
     fun deleteStoryToReadLater(story: Story): Completable {
-        return readLaterDao.delete(mappers.savedStoryDataModelEntity().map(story))
+        return readLaterDao.delete(mappers.domainModelMappers().savedStoryModelMapper.toEntity(story))
     }
 
     fun getStoriesReadLater(): Flowable<List<Story>> {
         return readLaterDao.findAll()
             .map { stories ->
-                stories.map { mappers.savedStoryEntityDataModel().map(it) }
+                stories.map { mappers.entityMappers().savedStoryMapper.toDomainModel(it) }
             }
     }
 

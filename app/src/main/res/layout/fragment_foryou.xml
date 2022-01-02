@@ -97,12 +97,12 @@
 
                 <include
                     android:id="@+id/layoutLoad"
-                    layout="@layout/load_layout"
+                    layout="@layout/layout_loading"
                     android:visibility="gone" />
 
                 <include
                     android:id="@+id/layoutError"
-                    layout="@layout/error_layout"
+                    layout="@layout/layout_error"
                     android:visibility="gone" />
 
             </LinearLayout>

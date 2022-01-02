@@ -18,8 +18,8 @@ import com.devkazonovic.projects.thenews.databinding.ItemTopstoryBinding
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.foryou.ForYouViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
-
 
 private const val KEY_STORY = "Story Object"
 private const val KEY_STORY_POSITION = "Story Position In List"
@@ -38,8 +38,6 @@ class TopStoryFragment : Fragment() {
     private lateinit var textViewPublishedDate: TextView
     private lateinit var imageViewArticleImg: ImageView
 
-    private val viewModel by
-    hiltNavGraphViewModels<ForYouViewModel>(R.id.forYouPage)
 
     @Inject
     lateinit var articleScrapper: ArticleScrapper
@@ -68,22 +66,14 @@ class TopStoryFragment : Fragment() {
             textViewTitle.text = it.title
             textViewPublishedDate.text = DateTimeUtil.showTimePassed(context, it.publishDateFormat)
             articleScrapper.getArticleImageUrl(it.url)
-                .subscribe(
-                    { imgUrl ->
-                        Glide.with(binding.root.context)
-                            .load(imgUrl)
-                            .placeholder(R.drawable.ic_grey)
-                            .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
-                            .into(imageViewArticleImg)
-                    },
-                    {
-                        Glide.with(binding.root.context)
-                            .load("")
-                            .placeholder(R.drawable.ic_grey)
-                            .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
-                            .into(imageViewArticleImg)
-                    }
-                )
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { imgUrl ->
+                    Glide.with(imageViewArticleImg.context)
+                        .load(imgUrl)
+                        .placeholder(R.drawable.ic_grey)
+                        .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
+                        .into(imageViewArticleImg)
+                }
         }
     }
 

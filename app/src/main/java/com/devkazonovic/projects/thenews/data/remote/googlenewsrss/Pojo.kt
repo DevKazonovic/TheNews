@@ -33,7 +33,7 @@ data class Item @JvmOverloads constructor(
     val itemSource: ItemSource? = null
 ) : Serializable
 
-@Root(name = "itemSource", strict = false)
+@Root(name = "source", strict = false)
 data class ItemSource @JvmOverloads constructor(
     @field:Attribute(name = "url", required = false)
     var url: String? = null,

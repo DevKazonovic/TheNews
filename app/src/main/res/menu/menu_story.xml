@@ -5,16 +5,13 @@
     <item
         android:id="@+id/action_save"
         android:title="@string/label_save_for_later"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_share"
         android:title="@string/label_share"
-        app:showAsAction="ifRoom"
-        />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_open_source"
         android:title=""
-        app:showAsAction="always"
-        />
+        app:showAsAction="always" />
 </menu>

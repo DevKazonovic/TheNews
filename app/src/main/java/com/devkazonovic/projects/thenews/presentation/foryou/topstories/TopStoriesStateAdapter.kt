@@ -51,13 +51,10 @@ class TopStoriesStateAdapter(
 
         @JvmStatic
         fun initStateList(size: Int): List<Pair<Int, Boolean>> {
-            val list = mutableListOf(
-                Pair(0, true)
-            )
+            val list = mutableListOf(Pair(0, true))
             for (item in 1 until size) {
                 list.add(Pair(item, false))
             }
-
             return list
         }
     }

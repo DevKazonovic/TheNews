@@ -18,11 +18,12 @@ open class ArticleScrapper @Inject constructor(
     open fun getArticleImageUrl(url: String): Single<String> {
         return Single.fromCallable {
             val doc = Jsoup.connect(url)
-                .followRedirects(true).get()
+                .followRedirects(true)
+                .get()
             doc.select(TAG_HEAD)
                 .select("meta[property=$OPEN_GRAPH_META_IMG]")
                 .attr(ATTRIBUTE_CONTENT)
         }.subscribeOn(schedulers.ioScheduler())
-            .observeOn(schedulers.uiScheduler())
+            .onErrorReturnItem("")
     }
 }

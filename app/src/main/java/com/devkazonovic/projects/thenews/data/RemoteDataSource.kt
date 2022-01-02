@@ -1,8 +1,8 @@
 package com.devkazonovic.projects.thenews.data
 
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.GoogleNewsClient
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.RSS
-import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.GoogleNewsClient
 import com.devkazonovic.projects.thenews.domain.mapper.Mappers
 import com.devkazonovic.projects.thenews.domain.model.LanguageZone
 import com.devkazonovic.projects.thenews.domain.model.Story
@@ -27,7 +27,11 @@ class RemoteDataSource @Inject constructor(
             language = languageZone.second,
             languageAndCountry = ceid
         ).map {
-            getItemsFromRss(it).map { item -> mapper.storyXmlDataModel().map(item) }
+            getItemsFromRss(it).map { item ->
+                mapper.pojoMappers().storyPojoMapper.toDomainModel(
+                    item
+                )
+            }
         }
     }
 
@@ -39,7 +43,11 @@ class RemoteDataSource @Inject constructor(
             languageAndCountry = ceid,
             topicId = topicId
         ).map {
-            getItemsFromRss(it).map { item -> mapper.storyXmlDataModel().map(item) }
+            getItemsFromRss(it).map { item ->
+                mapper.pojoMappers().storyPojoMapper.toDomainModel(
+                    item
+                )
+            }
         }
     }
 
@@ -51,7 +59,11 @@ class RemoteDataSource @Inject constructor(
             keyword = keyword,
             languageAndCountry = ceid
         ).map {
-            getItemsFromRss(it).map { item -> mapper.storyXmlDataModel().map(item) }
+            getItemsFromRss(it).map { item ->
+                mapper.pojoMappers().storyPojoMapper.toDomainModel(
+                    item
+                )
+            }
         }
     }
 

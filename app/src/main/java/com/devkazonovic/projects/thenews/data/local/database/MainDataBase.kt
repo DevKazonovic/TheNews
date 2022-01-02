@@ -4,14 +4,14 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.devkazonovic.projects.thenews.data.local.database.dao.ReadLaterDao
 import com.devkazonovic.projects.thenews.data.local.database.dao.StoriesDao
-import com.devkazonovic.projects.thenews.data.local.database.entity.T_SavedStory
-import com.devkazonovic.projects.thenews.data.local.database.entity.T_Story
+import com.devkazonovic.projects.thenews.data.local.database.entity.SavedStoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
 
 @Database(
     entities = [
-        T_Story::class,
-        T_SavedStory::class,
-    ], version = 5, exportSchema = false
+        StoryEntity::class,
+        SavedStoryEntity::class,
+    ], version = 6, exportSchema = false
 )
 abstract class MainDataBase : RoomDatabase() {
 

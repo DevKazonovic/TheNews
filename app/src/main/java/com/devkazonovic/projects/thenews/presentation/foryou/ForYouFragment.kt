@@ -11,6 +11,7 @@ import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -21,12 +22,13 @@ import com.devkazonovic.projects.thenews.common.extensions.show
 import com.devkazonovic.projects.thenews.common.util.ViewUtil.hide
 import com.devkazonovic.projects.thenews.common.util.ViewUtil.show
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
-import com.devkazonovic.projects.thenews.databinding.ErrorLayoutBinding
 import com.devkazonovic.projects.thenews.databinding.FragmentForyouBinding
-import com.devkazonovic.projects.thenews.databinding.LoadLayoutBinding
+import com.devkazonovic.projects.thenews.databinding.LayoutErrorBinding
+import com.devkazonovic.projects.thenews.databinding.LayoutLoadingBinding
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
+import com.devkazonovic.projects.thenews.presentation.common.StoryMenuFragment
 import com.devkazonovic.projects.thenews.presentation.foryou.topstories.TopStoriesStateAdapter
 import com.devkazonovic.projects.thenews.presentation.foryou.topstories.TopStoriesViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,19 +38,19 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ForYouFragment : Fragment() {
 
-    private var _binding: FragmentForyouBinding? = null
-    private val binding get() = _binding!!
-
+    //Dependencies
     private val viewModel by
     hiltNavGraphViewModels<ForYouViewModel>(R.id.forYouPage)
 
     @Inject
     lateinit var articleScrapper: ArticleScrapper
 
+    //Views
+    private var _binding: FragmentForyouBinding? = null
+    private val binding get() = _binding!!
     private lateinit var layoutData: ViewGroup
-    private lateinit var layoutLoad: LoadLayoutBinding
-    private lateinit var layoutError: ErrorLayoutBinding
-
+    private lateinit var layoutLoad: LayoutLoadingBinding
+    private lateinit var layoutError: LayoutErrorBinding
     private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -56,6 +58,7 @@ class ForYouFragment : Fragment() {
     private lateinit var rvTopStoriesCarouselState: RecyclerView
     private lateinit var rvStories: RecyclerView
 
+    //Adapters
     private lateinit var storiesListAdapter: StoriesListAdapter
     private lateinit var topStoriesCarouselItemsAdapter: TopStoriesViewPagerAdapter
     private lateinit var topStoriesCarouselStateAdapter: TopStoriesStateAdapter
@@ -64,8 +67,8 @@ class ForYouFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentForyouBinding.inflate(inflater, container, false)
-        initViews()
         navController = findNavController()
+        initViews()
         toolbar.setMainPageToolbar(navController, drawerLayout)
         return binding.root
     }
@@ -73,11 +76,12 @@ class ForYouFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpRecyclerView()
+        setUpTopFive()
         viewModel.loadData()
         viewModel.stories.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
-                    onLoading()
+                   onLoading()
                 }
                 is Resource.Success -> {
                     onSuccess(it.data)
@@ -107,16 +111,33 @@ class ForYouFragment : Fragment() {
         }
     }
 
-    private fun setUpRecyclerView() {
-        storiesListAdapter = StoriesListAdapter(articleScrapper,{
-            Timber.d(it.url)
-        },{
+    private fun setUpTopFive(){
+        viewPagerTopStories.setPageTransformer(MarginPageTransformer(28))
 
+        val stateList =
+            TopStoriesStateAdapter.initStateList(5)
+        topStoriesCarouselStateAdapter = TopStoriesStateAdapter(stateList)
+        rvTopStoriesCarouselState.layoutManager =
+            LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        rvTopStoriesCarouselState.adapter = topStoriesCarouselStateAdapter
+        viewPagerTopStories.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                topStoriesCarouselStateAdapter.updateList(position)
+            }
+        })
+    }
+
+    private fun setUpRecyclerView() {
+        storiesListAdapter = StoriesListAdapter(requireActivity(),articleScrapper, {
+            Timber.d(it.url)
+        }, {
+            StoryMenuFragment.newInstance(it).show(childFragmentManager, StoryMenuFragment.TAG)
         })
         rvStories.layoutManager = LinearLayoutManager(requireContext())
         rvStories.adapter = storiesListAdapter
     }
-
 
     private fun onLoading() {
         hide(layoutData)
@@ -144,24 +165,8 @@ class ForYouFragment : Fragment() {
     }
 
     private fun setUpTopStoriesCarousel(topStories: List<Story>) {
-        topStoriesCarouselItemsAdapter = TopStoriesViewPagerAdapter(requireActivity(), topStories)
-        viewPagerTopStories.setPageTransformer(MarginPageTransformer(28))
+        topStoriesCarouselItemsAdapter = TopStoriesViewPagerAdapter(requireActivity(),topStories)
         viewPagerTopStories.adapter = topStoriesCarouselItemsAdapter
-        viewPagerTopStories.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                topStoriesCarouselStateAdapter.updateList(position)
-            }
-        })
-
-        val stateList =
-            TopStoriesStateAdapter.initStateList(topStories.size)
-        topStoriesCarouselStateAdapter = TopStoriesStateAdapter(stateList)
-        rvTopStoriesCarouselState.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        rvTopStoriesCarouselState.adapter = topStoriesCarouselStateAdapter
-
     }
 
     private fun setUpStoriesList(stories: List<Story>) {

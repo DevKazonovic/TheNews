@@ -13,9 +13,9 @@ import com.devkazonovic.projects.thenews.common.extensions.hide
 import com.devkazonovic.projects.thenews.common.extensions.show
 import com.devkazonovic.projects.thenews.common.util.ViewUtil
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
-import com.devkazonovic.projects.thenews.databinding.ErrorLayoutBinding
 import com.devkazonovic.projects.thenews.databinding.FragmentHeadlineBinding
-import com.devkazonovic.projects.thenews.databinding.LoadLayoutBinding
+import com.devkazonovic.projects.thenews.databinding.LayoutErrorBinding
+import com.devkazonovic.projects.thenews.databinding.LayoutLoadingBinding
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
@@ -33,8 +33,8 @@ class HeadlineFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var layoutData: ViewGroup
-    private lateinit var layoutLoad: LoadLayoutBinding
-    private lateinit var layoutError: ErrorLayoutBinding
+    private lateinit var layoutLoad: LayoutLoadingBinding
+    private lateinit var layoutError: LayoutErrorBinding
     private lateinit var rvHeadlines: RecyclerView
     private lateinit var adapter: StoriesListAdapter
 
@@ -94,8 +94,8 @@ class HeadlineFragment : Fragment() {
 
     private fun setUpList() {
         rvHeadlines.layoutManager = LinearLayoutManager(requireContext())
-        adapter = StoriesListAdapter(articleScrapper) {
-        }
+        adapter = StoriesListAdapter(requireContext(),articleScrapper, {
+        }, {})
         rvHeadlines.adapter = adapter
     }
 

@@ -28,7 +28,7 @@
 
         <include
             android:id="@+id/layoutError"
-            layout="@layout/error_layout"
+            layout="@layout/layout_error"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
 
         <include
             android:id="@+id/layoutLoad"
-            layout="@layout/load_layout"
+            layout="@layout/layout_loading"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
