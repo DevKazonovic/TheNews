@@ -79,6 +79,8 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     implementation "org.jsoup:jsoup:$jsoup_version"
+    implementation "androidx.browser:browser:1.4.0"
+
 
     implementation "io.reactivex.rxjava3:rxjava:3.0.10"
     implementation "io.reactivex.rxjava3:rxkotlin:3.0.1"

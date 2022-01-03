@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.devkazonovic.projects.thenews.domain.model.Story
 
-class TopStoriesViewPagerAdapter(
+class CarouselAdapter(
     activity: FragmentActivity,
     private val stories: List<Story> = listOf()
 ) : FragmentStateAdapter(activity) {

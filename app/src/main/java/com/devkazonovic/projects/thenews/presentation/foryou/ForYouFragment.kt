@@ -1,10 +1,12 @@
 package com.devkazonovic.projects.thenews.presentation.foryou
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -28,24 +30,21 @@ import com.devkazonovic.projects.thenews.databinding.LayoutLoadingBinding
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
-import com.devkazonovic.projects.thenews.presentation.common.StoryMenuFragment
-import com.devkazonovic.projects.thenews.presentation.foryou.topstories.TopStoriesStateAdapter
-import com.devkazonovic.projects.thenews.presentation.foryou.topstories.TopStoriesViewPagerAdapter
+import com.devkazonovic.projects.thenews.presentation.common.storymenu.StoryMenuFragment
+import com.devkazonovic.projects.thenews.presentation.foryou.topstories.CarouselStateAdapter
+import com.devkazonovic.projects.thenews.presentation.foryou.topstories.CarouselAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ForYouFragment : Fragment() {
 
-    //Dependencies
     private val viewModel by
     hiltNavGraphViewModels<ForYouViewModel>(R.id.forYouPage)
 
     @Inject
     lateinit var articleScrapper: ArticleScrapper
 
-    //Views
     private var _binding: FragmentForyouBinding? = null
     private val binding get() = _binding!!
     private lateinit var layoutData: ViewGroup
@@ -57,11 +56,9 @@ class ForYouFragment : Fragment() {
     private lateinit var viewPagerTopStories: ViewPager2
     private lateinit var rvTopStoriesCarouselState: RecyclerView
     private lateinit var rvStories: RecyclerView
-
-    //Adapters
     private lateinit var storiesListAdapter: StoriesListAdapter
-    private lateinit var topStoriesCarouselItemsAdapter: TopStoriesViewPagerAdapter
-    private lateinit var topStoriesCarouselStateAdapter: TopStoriesStateAdapter
+    private lateinit var topStoriesCarouselItemsAdapter: CarouselAdapter
+    private lateinit var carouselCarouselStateAdapter: CarouselStateAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -75,8 +72,8 @@ class ForYouFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpRecyclerView()
-        setUpTopFive()
+        setUpStoriesRecyclerView()
+        setUpTopFiveStoriesCarousel()
         viewModel.loadData()
         viewModel.stories.observe(viewLifecycleOwner) {
             when (it) {
@@ -111,32 +108,42 @@ class ForYouFragment : Fragment() {
         }
     }
 
-    private fun setUpTopFive(){
+    private fun setUpTopFiveStoriesCarousel(){
         viewPagerTopStories.setPageTransformer(MarginPageTransformer(28))
 
         val stateList =
-            TopStoriesStateAdapter.initStateList(5)
-        topStoriesCarouselStateAdapter = TopStoriesStateAdapter(stateList)
+            CarouselStateAdapter.initStateList(5)
+        carouselCarouselStateAdapter = CarouselStateAdapter(stateList)
         rvTopStoriesCarouselState.layoutManager =
             LinearLayoutManager(requireContext(), HORIZONTAL, false)
-        rvTopStoriesCarouselState.adapter = topStoriesCarouselStateAdapter
+        rvTopStoriesCarouselState.adapter = carouselCarouselStateAdapter
         viewPagerTopStories.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                topStoriesCarouselStateAdapter.updateList(position)
+                carouselCarouselStateAdapter.updateList(position)
             }
         })
     }
 
-    private fun setUpRecyclerView() {
+    private fun setUpStoriesRecyclerView() {
         storiesListAdapter = StoriesListAdapter(requireActivity(),articleScrapper, {
-            Timber.d(it.url)
+            onStoryClick(it)
         }, {
-            StoryMenuFragment.newInstance(it).show(childFragmentManager, StoryMenuFragment.TAG)
+            onStoryMenuClick(it)
         })
         rvStories.layoutManager = LinearLayoutManager(requireContext())
         rvStories.adapter = storiesListAdapter
+    }
+
+    private fun onStoryMenuClick(story: Story) {
+        StoryMenuFragment.newInstance(story).show(childFragmentManager, StoryMenuFragment.TAG)
+    }
+
+    private fun onStoryClick(it: Story) {
+        val customTabsIntent  = CustomTabsIntent.Builder().apply {
+        }.build()
+        customTabsIntent.launchUrl(requireContext(), Uri.parse(it.url))
     }
 
     private fun onLoading() {
@@ -150,8 +157,9 @@ class ForYouFragment : Fragment() {
         show(layoutData)
         stories?.let {
             if (it.isNotEmpty()) {
-                setUpTopStoriesCarousel(it.subList(0, 5))
-                setUpStoriesList(it.subList(6, it.size))
+                storiesListAdapter.submitList(it.subList(6, it.size))
+                topStoriesCarouselItemsAdapter = CarouselAdapter(requireActivity(),it.subList(0, 5))
+                viewPagerTopStories.adapter = topStoriesCarouselItemsAdapter
             }
         }
     }
@@ -164,17 +172,9 @@ class ForYouFragment : Fragment() {
         layoutError.txSubtitle.text = description
     }
 
-    private fun setUpTopStoriesCarousel(topStories: List<Story>) {
-        topStoriesCarouselItemsAdapter = TopStoriesViewPagerAdapter(requireActivity(),topStories)
-        viewPagerTopStories.adapter = topStoriesCarouselItemsAdapter
-    }
-
-    private fun setUpStoriesList(stories: List<Story>) {
-        storiesListAdapter.submitList(stories)
-    }
-
     companion object {
         @JvmStatic
         fun newInstance() = ForYouFragment()
+        const val TAG = "ForYou Page"
     }
 }

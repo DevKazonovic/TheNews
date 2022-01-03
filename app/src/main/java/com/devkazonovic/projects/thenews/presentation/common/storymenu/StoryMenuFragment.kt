@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation.common
+package com.devkazonovic.projects.thenews.presentation.common.storymenu
 
 import android.os.Bundle
 import android.view.LayoutInflater

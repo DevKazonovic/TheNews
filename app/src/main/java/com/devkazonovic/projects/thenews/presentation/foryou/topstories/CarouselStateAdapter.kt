@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.devkazonovic.projects.thenews.R
 
-class TopStoriesStateAdapter(
+class CarouselStateAdapter(
     private var data: List<Pair<Int, Boolean>>
-) : RecyclerView.Adapter<TopStoriesStateAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<CarouselStateAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var textView = itemView.findViewById<View>(R.id.circle)

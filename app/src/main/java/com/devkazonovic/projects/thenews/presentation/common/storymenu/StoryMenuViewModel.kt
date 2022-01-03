@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation.common
+package com.devkazonovic.projects.thenews.presentation.common.storymenu
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
