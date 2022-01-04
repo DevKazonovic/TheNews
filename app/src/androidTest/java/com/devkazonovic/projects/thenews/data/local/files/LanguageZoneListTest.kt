@@ -22,8 +22,7 @@ class LanguageZoneListTest {
 
     @Test
     fun getListOfSupportedLanguagesAndZonesFromGoogleNews() {
-        val actual =
-            LanguageZoneList(instrumentationContext).getList()
+        val actual = LanguageZoneList(instrumentationContext).getList()
         assertThat(actual).apply {
             isNotEmpty()
             contains(LanguageZone.DEFAULT)

@@ -20,13 +20,13 @@ class LanguageZoneViewModel @Inject constructor(
 
     fun showList() {
         val list = listProvider.getList()
-        val currentSelected = list.findLast { it.getCeId()==sharedPreferences.getLanguageZone() }
+        val currentSelected = list.findLast { it.getCeId() == sharedPreferences.getLanguageZone() }
         _currentSelectedLanguage.value = currentSelected ?: LanguageZone.DEFAULT
-        _languageZoneList.postValue(list.toMutableList().apply { remove(currentSelected)})
+        _languageZoneList.postValue(list.toMutableList().apply { remove(currentSelected) })
     }
 
     fun onLanguageZoneSelected(languageZone: LanguageZone) {
-        if(sharedPreferences.saveLanguageZone(languageZone.getCeId())){
+        if (sharedPreferences.saveLanguageZone(languageZone.getCeId())) {
             showList()
         }
 
@@ -43,5 +43,5 @@ class LanguageZoneViewModel @Inject constructor(
     }
 
     val languageZoneList: LiveData<List<LanguageZone>> get() = _languageZoneList
-    val currentSelectedLanguage : LiveData<LanguageZone> get() = _currentSelectedLanguage
+    val currentSelectedLanguage: LiveData<LanguageZone> get() = _currentSelectedLanguage
 }

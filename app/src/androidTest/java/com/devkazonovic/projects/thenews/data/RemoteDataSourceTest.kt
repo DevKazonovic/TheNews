@@ -4,9 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.devkazonovic.projects.thenews.AndroidTestFactory
+import com.devkazonovic.projects.thenews.AndroidTestFactory.mapper
 import com.devkazonovic.projects.thenews.data.local.Topics
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.GoogleNewsClient
-import com.devkazonovic.projects.thenews.domain.mapper.MapperFactory
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
@@ -27,9 +27,12 @@ class RemoteDataSourceTest {
     @Before
     fun setUp() {
         dataSource = RemoteDataSource(
-            AndroidTestFactory.api(AndroidTestFactory.URL_GOOGLE_NEWS_FEED, Schedulers.trampoline())
+            AndroidTestFactory.googleNewsRssRetrofit(
+                AndroidTestFactory.URL_GOOGLE_NEWS_FEED,
+                Schedulers.trampoline()
+            )
                 .create(GoogleNewsClient::class.java),
-            MapperFactory()
+            mapper
         )
     }
 

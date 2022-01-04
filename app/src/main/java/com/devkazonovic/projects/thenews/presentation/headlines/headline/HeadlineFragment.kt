@@ -94,7 +94,7 @@ class HeadlineFragment : Fragment() {
 
     private fun setUpList() {
         rvHeadlines.layoutManager = LinearLayoutManager(requireContext())
-        adapter = StoriesListAdapter(requireContext(),articleScrapper, {
+        adapter = StoriesListAdapter(requireContext(), articleScrapper, {
         }, {})
         rvHeadlines.adapter = adapter
     }

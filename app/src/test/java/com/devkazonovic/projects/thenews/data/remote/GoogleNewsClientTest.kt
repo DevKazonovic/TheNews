@@ -24,7 +24,7 @@ class GoogleNewsClientTest {
         mockWebServer = MockWebServer()
         mockWebServer.dispatcher = GoogleNewsFeedMock.mockDispatcher
         mockWebServer.start()
-        googleNewsClient = UnitTestFactory.api(
+        googleNewsClient = UnitTestFactory.googleNewsRssRetrofit(
             mockWebServer.url("/").toUrl().toString(),
             Schedulers.trampoline()
         ).create(GoogleNewsClient::class.java)

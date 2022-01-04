@@ -18,7 +18,7 @@ abstract class StoriesDao {
 
     @Transaction
     @Query("SELECT * FROM story")
-    abstract fun findAll(): Single<List<StoryEntity>>
+    abstract fun findTopStories(): Single<List<StoryEntity>>
 
     @Transaction
     @Query("SELECT * FROM story WHERE topicId=:topicId")
@@ -26,5 +26,8 @@ abstract class StoriesDao {
 
     @Query("SELECT * FROM readlater")
     abstract fun findReadLaterStories(): Flowable<SavedStoryEntity>
+
+    @Query("DELETE FROM story")
+    abstract fun deleteTopStories()
 
 }

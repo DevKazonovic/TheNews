@@ -8,10 +8,10 @@ import timber.log.Timber
 import java.io.IOException
 import java.net.SocketException
 
-fun <T> Single<T>.toResult(): Single<Resource<T>> = this
+fun <T:Any> Single<T>.toResult(): Single<Resource<T>> = this
     .map<Resource<T>> { Resource.Success(it) }
     .onErrorReturn { exception ->
-        Timber.e(exception)
+        println(exception)
         when (exception) {
             is SocketException -> {
                 Resource.Error(R.string.error_unknown)
@@ -25,7 +25,7 @@ fun <T> Single<T>.toResult(): Single<Resource<T>> = this
         }
     }
 
-fun <T> Flowable<T>.toResult(): Flowable<Resource<T>> = this
+fun <T:Any> Flowable<T>.toResult(): Flowable<Resource<T>> = this
     .map<Resource<T>> { Resource.Success(it) }
     .onErrorReturn { exception ->
         Timber.e(exception)

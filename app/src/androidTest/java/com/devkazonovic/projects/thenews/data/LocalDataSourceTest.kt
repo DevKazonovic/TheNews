@@ -1,26 +1,22 @@
 package com.devkazonovic.projects.thenews.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.devkazonovic.projects.thenews.AndroidTestFactory
-import com.devkazonovic.projects.thenews.DummyUtil.dataModelStory1
-import com.devkazonovic.projects.thenews.DummyUtil.dataModelStory2
-import com.devkazonovic.projects.thenews.domain.mapper.Mappers
-import com.devkazonovic.projects.thenews.domain.mapper.PojoMappers
-import com.devkazonovic.projects.thenews.domain.mapper.SourcePojoMapper
-import com.devkazonovic.projects.thenews.domain.mapper.StoryPojoMapper
-import com.devkazonovic.projects.thenews.service.DateTimeFormatter
-import com.devkazonovic.projects.thenews.service.UniqueGenerator
+import com.devkazonovic.projects.thenews.AndroidTestFactory.mapper
+import com.devkazonovic.projects.thenews.data.local.database.MainDataBase
+import com.devkazonovic.projects.thenews.domain.model.Ago
+import com.devkazonovic.projects.thenews.domain.model.Source
+import com.devkazonovic.projects.thenews.domain.model.Story
 import com.google.common.truth.Truth.assertThat
+import io.reactivex.rxjava3.core.Completable
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.threeten.bp.Clock
 
 @RunWith(AndroidJUnit4::class)
 class LocalDataSourceTest {
@@ -29,47 +25,60 @@ class LocalDataSourceTest {
     @JvmField
     val rule: TestRule = InstantTaskExecutorRule()
 
-    private lateinit var mappers: Mappers
+    private lateinit var mainDataBase: MainDataBase
     private lateinit var localDataSource: LocalDataSource
 
     @Before
     fun setUp() {
-        mappers = mock(Mappers::class.java)
-        `when`(mappers.pojoMappers()).thenReturn(
-            PojoMappers(
-                StoryPojoMapper(
-                    SourcePojoMapper(UniqueGenerator()),
-                    DateTimeFormatter(Clock.systemUTC())
-                ), SourcePojoMapper(UniqueGenerator())
-            )
-        )
-        localDataSource = LocalDataSource(
-            AndroidTestFactory.getMainDataBase(ApplicationProvider.getApplicationContext()),
-            mappers
-        )
+        mainDataBase = AndroidTestFactory.mainDataBase(getApplicationContext())
+        localDataSource = LocalDataSource(mainDataBase, mapper)
+    }
+
+    @Test
+    fun test_saveStoriesToCache() {
+        localDataSource.saveStoriesToCache(listOf(story1, story2))
+            .test()
+            .assertComplete()
+        localDataSource.getCachedStories()
+            .test()
+            .assertValue {
+                assertThat(it).apply {
+                    hasSize(2)
+                }
+                true
+            }
+            .assertComplete()
+    }
+
+    @Test
+    fun deleteCachedStories() {
+        Completable.fromCallable {
+            localDataSource.deleteAllCachedStories()
+        }.test()
+            .assertComplete()
     }
 
     @Test
     fun test_saveStoryToReadLater() {
-        localDataSource.saveStoryToReadLater(dataModelStory1)
+        localDataSource.saveStoryToReadLater(story1)
             .test()
             .assertComplete()
     }
 
     @Test
     fun test_deleteStoryFromReadLater() {
-        localDataSource.saveStoryToReadLater(dataModelStory1)
+        localDataSource.saveStoryToReadLater(story1)
             .blockingAwait()
-        localDataSource.deleteStoryToReadLater(dataModelStory1)
+        localDataSource.deleteStoryToReadLater(story1)
             .test()
             .assertComplete()
     }
 
     @Test
     fun test_getSavedStories() {
-        localDataSource.saveStoryToReadLater(dataModelStory1)
+        localDataSource.saveStoryToReadLater(story1)
             .blockingAwait()
-        localDataSource.saveStoryToReadLater(dataModelStory2)
+        localDataSource.saveStoryToReadLater(story2)
             .blockingAwait()
 
         localDataSource.getStoriesReadLater()
@@ -77,9 +86,33 @@ class LocalDataSourceTest {
             .assertValue {
                 assertThat(it).apply {
                     hasSize(2)
-                    containsExactly(dataModelStory1, dataModelStory2)
                 }
                 true
             }
+    }
+
+    @After
+    fun tearDown() {
+        mainDataBase.close()
+    }
+
+    companion object {
+        private const val sourceId = "sourceId"
+        val source =
+            Source(id = sourceId, name = "ABC News", url = "https://abcnews.go.com")
+        val story1 = Story(
+            url = "https://news.google.com/2022",
+            title = "Test in 2022",
+            publishDate = "Sat, 01 Jan 2022 05:25:02 GMT",
+            source = source,
+            publishDateFormat = Pair(1, Ago.DAY)
+        )
+        val story2 = Story(
+            url = "https://news.google.com/2022",
+            title = "Test in 2022",
+            publishDate = "Sat, 01 Jan 2022 05:25:02 GMT",
+            source = source,
+            publishDateFormat = Pair(1, Ago.DAY)
+        )
     }
 }

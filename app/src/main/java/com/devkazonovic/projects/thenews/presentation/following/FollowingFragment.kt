@@ -95,7 +95,7 @@ class FollowingFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        storiesListAdapter = StoriesListAdapter(requireContext(),articleScrapper, {
+        storiesListAdapter = StoriesListAdapter(requireContext(), articleScrapper, {
 
         }, {
 

@@ -1,18 +1,13 @@
 package com.devkazonovic.projects.thenews.presentation.common
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.devkazonovic.projects.thenews.R
 import com.devkazonovic.projects.thenews.common.util.DateTimeUtil.showTimePassed
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
@@ -30,7 +25,6 @@ class StoriesListAdapter(
 ) : ListAdapter<Story, StoriesListAdapter.StoryViewHolder>(Story.DIFF_UTIl) {
 
 
-
     class StoryViewHolder(
         private val context: Context,
         private val binding: ItemStoryBinding,
@@ -45,7 +39,8 @@ class StoriesListAdapter(
                 it.icStoryMenu.setOnClickListener { onMenuClick(story) }
                 it.textViewArticleSource.text = story.source.name
                 it.textViewArticleTitle.text = story.title
-                it.textViewArticlePublishDate.text = showTimePassed(context, story.publishDateFormat)
+                it.textViewArticlePublishDate.text =
+                    showTimePassed(context, story.publishDateFormat)
                 articleScrapper.getArticleImageUrl(story.url)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { imgUrl ->
@@ -63,7 +58,7 @@ class StoriesListAdapter(
         val binding = ItemStoryBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return StoryViewHolder(context,binding, articleScrapper, onClick, onMenuClick)
+        return StoryViewHolder(context, binding, articleScrapper, onClick, onMenuClick)
     }
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {

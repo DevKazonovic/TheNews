@@ -103,7 +103,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initStoriesList() {
-        storiesListAdapter = StoriesListAdapter(requireContext(),articleScrapper, {
+        storiesListAdapter = StoriesListAdapter(requireContext(), articleScrapper, {
             Timber.d(it.url)
         }, {})
         rvSearchStory.layoutManager = LinearLayoutManager(requireContext())

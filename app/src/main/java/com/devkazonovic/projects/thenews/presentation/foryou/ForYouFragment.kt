@@ -31,8 +31,8 @@ import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
 import com.devkazonovic.projects.thenews.presentation.common.storymenu.StoryMenuFragment
-import com.devkazonovic.projects.thenews.presentation.foryou.topstories.CarouselStateAdapter
 import com.devkazonovic.projects.thenews.presentation.foryou.topstories.CarouselAdapter
+import com.devkazonovic.projects.thenews.presentation.foryou.topstories.CarouselStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -78,7 +78,7 @@ class ForYouFragment : Fragment() {
         viewModel.stories.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
-                   onLoading()
+                    onLoading()
                 }
                 is Resource.Success -> {
                     onSuccess(it.data)
@@ -108,7 +108,7 @@ class ForYouFragment : Fragment() {
         }
     }
 
-    private fun setUpTopFiveStoriesCarousel(){
+    private fun setUpTopFiveStoriesCarousel() {
         viewPagerTopStories.setPageTransformer(MarginPageTransformer(28))
 
         val stateList =
@@ -127,7 +127,7 @@ class ForYouFragment : Fragment() {
     }
 
     private fun setUpStoriesRecyclerView() {
-        storiesListAdapter = StoriesListAdapter(requireActivity(),articleScrapper, {
+        storiesListAdapter = StoriesListAdapter(requireActivity(), articleScrapper, {
             onStoryClick(it)
         }, {
             onStoryMenuClick(it)
@@ -141,7 +141,7 @@ class ForYouFragment : Fragment() {
     }
 
     private fun onStoryClick(it: Story) {
-        val customTabsIntent  = CustomTabsIntent.Builder().apply {
+        val customTabsIntent = CustomTabsIntent.Builder().apply {
         }.build()
         customTabsIntent.launchUrl(requireContext(), Uri.parse(it.url))
     }
@@ -158,7 +158,8 @@ class ForYouFragment : Fragment() {
         stories?.let {
             if (it.isNotEmpty()) {
                 storiesListAdapter.submitList(it.subList(6, it.size))
-                topStoriesCarouselItemsAdapter = CarouselAdapter(requireActivity(),it.subList(0, 5))
+                topStoriesCarouselItemsAdapter =
+                    CarouselAdapter(requireActivity(), it.subList(0, 5))
                 viewPagerTopStories.adapter = topStoriesCarouselItemsAdapter
             }
         }

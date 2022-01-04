@@ -19,6 +19,7 @@ class ForYouViewModel @Inject constructor(
     private val schedulers: RxSchedulers
 ) : ViewModel() {
 
+    private var reload = true
     private var ceid = LanguageZone.DEFAULT.getCeId()
 
     private val _stories = MutableLiveData<Resource<List<Story>>>()
@@ -26,9 +27,13 @@ class ForYouViewModel @Inject constructor(
     fun loadData() {
         _stories.value = Resource.Loading()
         ceid = localKeyValue.getLanguageZone()
-        mainRepository.getStories(ceid)
+        mainRepository.getStories(ceid,reload)
+            .subscribeOn(schedulers.ioScheduler())
             .observeOn(schedulers.uiScheduler())
-            .subscribe { resource -> _stories.postValue(resource) }
+            .subscribe { resource ->
+                _stories.postValue(resource)
+                reload = false
+            }
     }
 
     val stories: LiveData<Resource<List<Story>>> = _stories

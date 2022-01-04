@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -16,7 +15,6 @@ import com.devkazonovic.projects.thenews.common.util.DateTimeUtil
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
 import com.devkazonovic.projects.thenews.databinding.ItemTopstoryBinding
 import com.devkazonovic.projects.thenews.domain.model.Story
-import com.devkazonovic.projects.thenews.presentation.foryou.ForYouViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject

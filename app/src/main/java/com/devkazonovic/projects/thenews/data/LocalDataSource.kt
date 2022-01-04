@@ -5,6 +5,8 @@ import com.devkazonovic.projects.thenews.domain.mapper.Mappers
 import com.devkazonovic.projects.thenews.domain.model.Story
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
@@ -13,7 +15,24 @@ class LocalDataSource @Inject constructor(
 ) {
 
     private val readLaterDao = mainDataBase.readLaterDao()
+    private val storiesDao = mainDataBase.storiesDao()
 
+    //Querying
+    fun getCachedStories(): Single<List<Story>> {
+        return storiesDao.findTopStories().map { stories ->
+            stories.map { mappers.entityMappers().storyEntityMapper.toDomainModel(it) }
+        }
+    }
+
+    fun getStoriesReadLater(): Flowable<List<Story>> {
+        return readLaterDao.findAll()
+            .map { stories ->
+                stories.map { mappers.entityMappers().savedStoryMapper.toDomainModel(it) }
+            }
+    }
+
+
+    //Operation
     fun saveStoryToReadLater(story: Story): Completable {
         return readLaterDao.insert(mappers.domainModelMappers().savedStoryModelMapper.toEntity(story))
     }
@@ -22,11 +41,16 @@ class LocalDataSource @Inject constructor(
         return readLaterDao.delete(mappers.domainModelMappers().savedStoryModelMapper.toEntity(story))
     }
 
-    fun getStoriesReadLater(): Flowable<List<Story>> {
-        return readLaterDao.findAll()
-            .map { stories ->
-                stories.map { mappers.entityMappers().savedStoryMapper.toDomainModel(it) }
+    fun saveStoriesToCache(stories: List<Story>): Completable {
+        return Observable.fromIterable(stories)
+            .map { item -> mappers.domainModelMappers().storyModelMapper.toEntity(item) }
+            .flatMapCompletable {
+                storiesDao.insert(it)
             }
+    }
+
+    fun deleteAllCachedStories() {
+        storiesDao.deleteTopStories()
     }
 
 }

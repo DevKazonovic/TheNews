@@ -1,6 +1,7 @@
 package com.devkazonovic.projects.thenews.domain
 
 import com.devkazonovic.projects.thenews.common.extensions.toResult
+import com.devkazonovic.projects.thenews.common.util.RxSchedulers
 import com.devkazonovic.projects.thenews.data.LocalDataSource
 import com.devkazonovic.projects.thenews.data.RemoteDataSource
 import com.devkazonovic.projects.thenews.domain.model.Resource
@@ -8,19 +9,40 @@ import com.devkazonovic.projects.thenews.domain.model.Story
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.functions.Supplier
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+    private val rxSchedulers: RxSchedulers
 ) {
 
-    fun getStories(languageZoneId: String): Single<Resource<List<Story>>> {
-        return remoteDataSource.getTopStories(languageZoneId).toResult()
+    fun getStories(languageZoneId: String, reload: Boolean = false): Single<Resource<List<Story>>> {
+        return localDataSource.getCachedStories().flatMap { cachedStories ->
+            if (cachedStories.isEmpty() || reload) {
+                if (cachedStories.isNotEmpty())
+                    Completable.fromCallable {
+                        localDataSource.deleteAllCachedStories()
+                    }.subscribeOn(rxSchedulers.ioScheduler()).subscribe()
+
+                remoteDataSource.getTopStories(languageZoneId).flatMap { remoteStories ->
+                    localDataSource.saveStoriesToCache(remoteStories)
+                        .blockingAwait()
+                   localDataSource.getCachedStories()
+                }
+            } else Single.just(cachedStories)
+        }.toResult()
+
     }
 
     fun getTopicStories(topicId: String, languageZoneId: String): Single<Resource<List<Story>>> {
         return remoteDataSource.getTopicStories(topicId, languageZoneId).toResult()
+    }
+
+    fun getReadLaterStories(): Flowable<Resource<List<Story>>> {
+        return localDataSource.getStoriesReadLater()
+            .toResult()
     }
 
     fun searchByKeyword(keyword: String, languageZoneId: String): Single<Resource<List<Story>>> {
@@ -35,8 +57,4 @@ class MainRepository @Inject constructor(
         return localDataSource.deleteStoryToReadLater(story)
     }
 
-    fun getReadLaterStories(): Flowable<Resource<List<Story>>> {
-        return localDataSource.getStoriesReadLater()
-            .toResult()
-    }
 }

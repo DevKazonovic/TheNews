@@ -28,7 +28,7 @@ class LanguageSettingFragment : Fragment() {
     private var _binding: FragmentLanguageSettingBinding? = null
     private val binding get() = _binding!!
     private lateinit var toolbar: Toolbar
-    private lateinit var rbCurrentSelectedOption : TextView
+    private lateinit var rbCurrentSelectedOption: TextView
     private lateinit var radioGroupList: RadioGroup
     private lateinit var tfSearch: TextInputLayout
 
@@ -53,7 +53,7 @@ class LanguageSettingFragment : Fragment() {
         viewModel.languageZoneList.observe(viewLifecycleOwner) {
             onSuccess(it)
         }
-        viewModel.currentSelectedLanguage.observe(viewLifecycleOwner){
+        viewModel.currentSelectedLanguage.observe(viewLifecycleOwner) {
             rbCurrentSelectedOption.text = it.name
         }
 

@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.testHelp
+package com.devkazonovic.projects.thenews.androidTestHelp
 
 import com.devkazonovic.projects.thenews.service.DateTimeFormatter
 import org.threeten.bp.Clock

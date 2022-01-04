@@ -16,7 +16,7 @@ class CarouselAdapter(
         return TopStoryFragment.newInstance(stories[position], position)
     }
 
-    fun setList(stories: List<Story>){
+    fun setList(stories: List<Story>) {
         stories.toMutableList().apply {
             clear()
             addAll(stories)
