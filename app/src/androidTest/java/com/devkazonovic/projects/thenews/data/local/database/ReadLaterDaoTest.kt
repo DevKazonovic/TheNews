@@ -61,6 +61,8 @@ class ReadLaterDaoTest {
             }
     }
 
+
+    //--------Setup & Teardown---------//
     @Before
     fun setUp() {
         try {
@@ -77,6 +79,7 @@ class ReadLaterDaoTest {
         database.close()
     }
 
+    //--------Dummy Objects---------//
     companion object {
         private val source1 = SourceEntity("source1", "Source1", "source_url1")
         private val source2 = SourceEntity("source2", "Source2", "source_url2")

@@ -1,7 +1,7 @@
-package com.devkazonovic.projects.thenews.testHelp
+package com.devkazonovic.projects.thenews.data.remote.googlenewsrss
 
-import com.devkazonovic.projects.thenews.testHelp.IOUtil.findFiles
-import com.devkazonovic.projects.thenews.testHelp.IOUtil.readAll
+import com.devkazonovic.projects.thenews.util.IOUtil.findFiles
+import com.devkazonovic.projects.thenews.util.IOUtil.readAll
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.RecordedRequest
@@ -14,20 +14,20 @@ object GoogleNewsFeedMock {
     val mockDispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
             return when (request.path) {
-                "/rss?ceid=US:en" -> {
+                "/rss?hl=en&gl=US&ceid=US:en" -> {
                     MockResponse().apply {
                         setResponseCode(200)
                         setBody(readAll(findFiles("topstories.xml")))
                     }
                 }
-                "/rss/topics/$ID_TECH" -> {
+                "/rss/topics/$ID_TECH?hl=en&gl=US&ceid=US:en" -> {
                     MockResponse().apply {
                         setResponseCode(200)
                         setBody(readAll(findFiles("topstories.xml")))
                     }
                 }
 
-                "/rss/search?q=tech" -> {
+                "/rss/search?q=tech&hl=en&gl=US&ceid=US:en" -> {
                     MockResponse().apply {
                         setResponseCode(200)
                         setBody(readAll(findFiles("topstories.xml")))

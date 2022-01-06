@@ -14,7 +14,10 @@ class RSS @JvmOverloads constructor(
 data class Channel @JvmOverloads constructor(
     @field:ElementList(name = "item", inline = true, required = false)
     @param:ElementList(name = "item", inline = true, required = false)
-    val items: List<Item>? = null
+    val items: List<Item>? = null,
+    @field:Element(name = "lastBuildDate")
+    @param:Element(name = "lastBuildDate")
+    val lastBuildDate: String? = null
 ) : Serializable
 
 @Root(name = "item", strict = false)

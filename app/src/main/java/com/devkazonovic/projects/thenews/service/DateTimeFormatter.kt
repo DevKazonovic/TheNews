@@ -37,7 +37,7 @@ class DateTimeFormatter @Inject constructor(
         ).toInstant()
     }
 
-    fun howMuchAgo(dateGoogleRssFormat: String): Pair<Int, Ago> {
+    fun calcTimePassed(dateGoogleRssFormat: String): Pair<Int, Ago> {
         val publishedDateInstant = getHowMuchTimePassed(dateGoogleRssFormat)
         val currentDateInstant = Instant.now(clock)
 

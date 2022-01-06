@@ -17,33 +17,34 @@ class LocalDataSource @Inject constructor(
     private val readLaterDao = mainDataBase.readLaterDao()
     private val storiesDao = mainDataBase.storiesDao()
 
-    //Querying
     fun getCachedStories(): Single<List<Story>> {
         return storiesDao.findTopStories().map { stories ->
-            stories.map { mappers.entityMappers().storyEntityMapper.toDomainModel(it) }
+            stories.map { mappers.entityMappers().storyEntityMapper().toDomainModel(it) }
         }
     }
 
     fun getStoriesReadLater(): Flowable<List<Story>> {
         return readLaterDao.findAll()
             .map { stories ->
-                stories.map { mappers.entityMappers().savedStoryMapper.toDomainModel(it) }
+                stories.map { mappers.entityMappers().savedStoryMapper().toDomainModel(it) }
             }
     }
 
-
-    //Operation
     fun saveStoryToReadLater(story: Story): Completable {
-        return readLaterDao.insert(mappers.domainModelMappers().savedStoryModelMapper.toEntity(story))
+        return readLaterDao.insert(
+            mappers.domainModelMappers().savedStoryModelMapper().toEntity(story)
+        )
     }
 
     fun deleteStoryToReadLater(story: Story): Completable {
-        return readLaterDao.delete(mappers.domainModelMappers().savedStoryModelMapper.toEntity(story))
+        return readLaterDao.delete(
+            mappers.domainModelMappers().savedStoryModelMapper().toEntity(story)
+        )
     }
 
     fun saveStoriesToCache(stories: List<Story>): Completable {
         return Observable.fromIterable(stories)
-            .map { item -> mappers.domainModelMappers().storyModelMapper.toEntity(item) }
+            .map { item -> mappers.domainModelMappers().storyModelMapper().toEntity(item) }
             .flatMapCompletable {
                 storiesDao.insert(it)
             }

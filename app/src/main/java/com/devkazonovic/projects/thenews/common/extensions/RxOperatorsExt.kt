@@ -8,7 +8,7 @@ import timber.log.Timber
 import java.io.IOException
 import java.net.SocketException
 
-fun <T:Any> Single<T>.toResult(): Single<Resource<T>> = this
+fun <T : Any> Single<T>.toResult(): Single<Resource<T>> = this
     .map<Resource<T>> { Resource.Success(it) }
     .onErrorReturn { exception ->
         println(exception)
@@ -25,7 +25,7 @@ fun <T:Any> Single<T>.toResult(): Single<Resource<T>> = this
         }
     }
 
-fun <T:Any> Flowable<T>.toResult(): Flowable<Resource<T>> = this
+fun <T : Any> Flowable<T>.toResult(): Flowable<Resource<T>> = this
     .map<Resource<T>> { Resource.Success(it) }
     .onErrorReturn { exception ->
         Timber.e(exception)

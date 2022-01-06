@@ -65,8 +65,4 @@ class StoriesListAdapter(
         holder.bind(currentList[position])
     }
 
-    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        super.onDetachedFromRecyclerView(recyclerView)
-
-    }
 }

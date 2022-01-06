@@ -11,10 +11,28 @@ import com.devkazonovic.projects.thenews.service.DateTimeFormatter
 import com.devkazonovic.projects.thenews.service.UniqueGenerator
 import javax.inject.Inject
 
+interface IPojoMappers {
+    fun storyPojoMapper(): PojoMapper<Item, StoryEntity, Story>
+    fun sourcePojoMapper(): PojoMapper<ItemSource, SourceEntity, Source>
+}
+
+class PojoMappers @Inject constructor(
+    private val storyPojoMapper: StoryPojoMapper,
+    private val sourcePojoMapper: SourcePojoMapper
+) : IPojoMappers {
+    override fun storyPojoMapper(): PojoMapper<Item, StoryEntity, Story> =
+        storyPojoMapper
+
+    override fun sourcePojoMapper(): PojoMapper<ItemSource, SourceEntity, Source> =
+        sourcePojoMapper
+}
+
+/**Mappers*/
 class StoryPojoMapper @Inject constructor(
     private val sourcePojoMapper: SourcePojoMapper,
     private val dateTimeFormatter: DateTimeFormatter
 ) : PojoMapper<Item, StoryEntity, Story> {
+
     override fun toEntity(input: Item?): StoryEntity {
         return if (input?.link == null) {
             StoryEntity.EMPTY
@@ -38,18 +56,17 @@ class StoryPojoMapper @Inject constructor(
                 title = input.title ?: "",
                 publishDate = input.pubDate ?: "",
                 publishDateFormat = input.pubDate?.let {
-                    dateTimeFormatter.howMuchAgo(it)
+                    dateTimeFormatter.calcTimePassed(it)
                 } ?: Pair(0, Ago.NON)
             )
         }
     }
-
-
 }
 
 class SourcePojoMapper @Inject constructor(
     private val uniqueGenerator: UniqueGenerator
 ) : PojoMapper<ItemSource, SourceEntity, Source> {
+
     override fun toEntity(input: ItemSource?): SourceEntity {
         return input?.let {
             SourceEntity(
@@ -69,11 +86,5 @@ class SourcePojoMapper @Inject constructor(
         )
     }
 
-
 }
 
-
-class PojoMappers @Inject constructor(
-    val storyPojoMapper: StoryPojoMapper,
-    val sourcePojoMapper: SourcePojoMapper
-)

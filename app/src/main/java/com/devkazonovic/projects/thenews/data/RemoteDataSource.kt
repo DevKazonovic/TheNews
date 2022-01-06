@@ -9,12 +9,6 @@ import com.devkazonovic.projects.thenews.domain.model.Story
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
-/**
- * RemoteDataSources Provide a simple API to get data from multiple remote data sources.
- *
- * RemoteDataSource : have the logic to combine multiple remote data sources into one
- * itemSource that will be used by the repository.
- * */
 class RemoteDataSource @Inject constructor(
     private val googleNewsClient: GoogleNewsClient,
     private val mapper: Mappers
@@ -28,14 +22,14 @@ class RemoteDataSource @Inject constructor(
             languageAndCountry = ceid
         ).map {
             getItemsFromRss(it).map { item ->
-                mapper.pojoMappers().storyPojoMapper.toDomainModel(
+                mapper.pojoMappers().storyPojoMapper().toDomainModel(
                     item
                 )
             }
         }
     }
 
-    fun getTopicStories(topicId: String, ceid: String): Single<List<Story>> {
+    fun getTopicStories(ceid: String, topicId: String): Single<List<Story>> {
         val languageZone = LanguageZone.getLanguageZone(ceid)
         return googleNewsClient.getTopicStories(
             country = languageZone.first,
@@ -44,14 +38,14 @@ class RemoteDataSource @Inject constructor(
             topicId = topicId
         ).map {
             getItemsFromRss(it).map { item ->
-                mapper.pojoMappers().storyPojoMapper.toDomainModel(
+                mapper.pojoMappers().storyPojoMapper().toDomainModel(
                     item
                 )
             }
         }
     }
 
-    fun searchByKeyword(keyword: String, ceid: String): Single<List<Story>> {
+    fun searchByKeyword(ceid: String, keyword: String): Single<List<Story>> {
         val languageZone = LanguageZone.getLanguageZone(ceid)
         return googleNewsClient.search(
             country = languageZone.first,
@@ -60,7 +54,7 @@ class RemoteDataSource @Inject constructor(
             languageAndCountry = ceid
         ).map {
             getItemsFromRss(it).map { item ->
-                mapper.pojoMappers().storyPojoMapper.toDomainModel(
+                mapper.pojoMappers().storyPojoMapper().toDomainModel(
                     item
                 )
             }

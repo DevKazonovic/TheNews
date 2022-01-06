@@ -27,7 +27,7 @@ class ForYouViewModel @Inject constructor(
     fun loadData() {
         _stories.value = Resource.Loading()
         ceid = localKeyValue.getLanguageZone()
-        mainRepository.getStories(ceid,reload)
+        mainRepository.getStories(ceid, reload)
             .subscribeOn(schedulers.ioScheduler())
             .observeOn(schedulers.uiScheduler())
             .subscribe { resource ->

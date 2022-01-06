@@ -10,6 +10,27 @@ import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.service.DateTimeFormatter
 import javax.inject.Inject
 
+interface IEntityMappers {
+    fun storyEntityMapper(): EntityMapper<StoryEntity, Story, Item>
+    fun sourceEntityMapper(): EntityMapper<SourceEntity, Source, ItemSource>
+    fun savedStoryMapper(): EntityMapper<SavedStoryEntity, Story, Item>
+}
+
+class EntityMappers @Inject constructor(
+    private val storyEntityMapper: StoryEntityMapper,
+    private val sourceEntityMapper: SourceEntityMapper,
+    private val savedStoryMapper: SavedStoryMapper
+) : IEntityMappers {
+
+    override fun storyEntityMapper(): EntityMapper<StoryEntity, Story, Item> = storyEntityMapper
+
+    override fun sourceEntityMapper(): EntityMapper<SourceEntity, Source, ItemSource> =
+        sourceEntityMapper
+
+    override fun savedStoryMapper(): EntityMapper<SavedStoryEntity, Story, Item> = savedStoryMapper
+}
+
+/**Mappers*/
 class StoryEntityMapper @Inject constructor(
     private val sourceEntityMapper: SourceEntityMapper,
     private val dateTimeFormatter: DateTimeFormatter
@@ -22,7 +43,7 @@ class StoryEntityMapper @Inject constructor(
                 title = it.title,
                 publishDate = it.publishDate,
                 source = sourceEntityMapper.toDomainModel(it.sourceEntity),
-                publishDateFormat = dateTimeFormatter.howMuchAgo(it.publishDate)
+                publishDateFormat = dateTimeFormatter.calcTimePassed(it.publishDate)
             )
         } ?: Story.EMPTY
     }
@@ -53,14 +74,9 @@ class SavedStoryMapper @Inject constructor(
                 title = it.title,
                 publishDate = it.publishDate,
                 source = sourceEntityMapper.toDomainModel(it.sourceEntity),
-                publishDateFormat = dateTimeFormatter.howMuchAgo(it.publishDate)
+                publishDateFormat = dateTimeFormatter.calcTimePassed(it.publishDate)
             )
         } ?: Story.EMPTY
     }
 }
 
-class EntityMappers @Inject constructor(
-    val storyEntityMapper: StoryEntityMapper,
-    val sourceEntityMapper: SourceEntityMapper,
-    val savedStoryMapper: SavedStoryMapper
-)

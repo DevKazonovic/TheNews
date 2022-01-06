@@ -16,38 +16,25 @@ class DomainModelMappersTest {
     private lateinit var sourceModelMapper: SourceModelMapper
     private lateinit var storyModelMapper: StoryModelMapper
 
-    @Before
-    fun setUp() {
-        sourceModelMapper = SourceModelMapper()
-        storyModelMapper = StoryModelMapper(sourceModelMapper)
-    }
-
     @Test
-    fun testMap_fromSourceDomainModel_toSourceEntity() {
+    fun test_fromSourceDomainModel_toSourceEntity() {
         assertThat(sourceModelMapper.toEntity(sourceDomainModel)).apply {
             isEqualTo(expectedSourceEntity)
         }
     }
 
     @Test
-    fun testMap_fromSourceDomainModel_toSourceRss() {
-        assertThat(sourceModelMapper.toPojo(sourceDomainModel)).apply {
-            isEqualTo(expectedSourceRss)
-        }
-    }
-
-    @Test
-    fun testMap_fromStoryDomainModel_toStoryEntity() {
+    fun test_fromStoryDomainModel_toStoryEntity() {
         assertThat(storyModelMapper.toEntity(storyDomainModel)).apply {
             isEqualTo(expectedStoryEntity)
         }
     }
 
-    @Test
-    fun testMap_fromStoryDomainModel_toStoryRss() {
-        assertThat(storyModelMapper.toPojo(storyDomainModel)).apply {
-            isEqualTo(expectedStoryRss)
-        }
+
+    @Before
+    fun setUp() {
+        sourceModelMapper = SourceModelMapper()
+        storyModelMapper = StoryModelMapper(sourceModelMapper)
     }
 
     companion object {

@@ -9,12 +9,28 @@ import com.devkazonovic.projects.thenews.domain.model.Source
 import com.devkazonovic.projects.thenews.domain.model.Story
 import javax.inject.Inject
 
-class DomainModelMappers @Inject constructor(
-    val storyModelMapper: StoryModelMapper,
-    val savedStoryModelMapper: SavedStoryModelMapper,
-    val sourceModelMapper: SourceModelMapper
-)
+interface IDomainModelMappers {
+    fun storyModelMapper(): DomainModelMapper<Story, StoryEntity, Item>
+    fun savedStoryModelMapper(): DomainModelMapper<Story, SavedStoryEntity, Item>
+    fun sourceModelMapper(): DomainModelMapper<Source, SourceEntity, ItemSource>
+}
 
+class DomainModelMappers @Inject constructor(
+    private val storyModelMapper: StoryModelMapper,
+    private val savedStoryModelMapper: SavedStoryModelMapper,
+    private val sourceModelMapper: SourceModelMapper
+) : IDomainModelMappers {
+    override fun storyModelMapper(): DomainModelMapper<Story, StoryEntity, Item> = storyModelMapper
+
+    override fun savedStoryModelMapper(): DomainModelMapper<Story, SavedStoryEntity, Item> =
+        savedStoryModelMapper
+
+    override fun sourceModelMapper(): DomainModelMapper<Source, SourceEntity, ItemSource> =
+        sourceModelMapper
+}
+
+
+/**Mappers*/
 class StoryModelMapper @Inject constructor(
     private val sourceModelMapper: SourceModelMapper
 ) : DomainModelMapper<Story, StoryEntity, Item> {

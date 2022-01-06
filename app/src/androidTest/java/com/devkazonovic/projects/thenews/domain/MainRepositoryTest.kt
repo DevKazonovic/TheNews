@@ -5,23 +5,25 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.devkazonovic.projects.thenews.AndroidTestFactory
 import com.devkazonovic.projects.thenews.AndroidTestFactory.mainDataBase
-import com.devkazonovic.projects.thenews.AndroidTestFactory.mapper
 import com.devkazonovic.projects.thenews.data.LocalDataSource
 import com.devkazonovic.projects.thenews.data.RemoteDataSource
 import com.devkazonovic.projects.thenews.data.local.database.MainDataBase
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
+import com.devkazonovic.projects.thenews.domain.mapper.MapperFactory
 import com.devkazonovic.projects.thenews.domain.model.*
+import com.devkazonovic.projects.thenews.service.UniqueGenerator
 import com.google.common.truth.Truth.assertThat
 import io.reactivex.rxjava3.core.Single
-
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 
 @RunWith(AndroidJUnit4::class)
 class MainRepositoryTest {
@@ -35,21 +37,9 @@ class MainRepositoryTest {
     private lateinit var remoteDataSource: RemoteDataSource
     private lateinit var repository: MainRepository
 
-
-    @Before
-    fun setUp() {
-        mainDataBase = mainDataBase(ApplicationProvider.getApplicationContext())
-        localDataSource = LocalDataSource(mainDataBase, mapper)
-        remoteDataSource = mock(RemoteDataSource::class.java)
-        repository = MainRepository(
-            remoteDataSource, localDataSource,
-            AndroidTestFactory.TestRxSchedulersFactory()
-        )
-    }
-
     @Test
     fun whenCacheIsEmptyReloadIsFalse_getStoriesFromRemoteSourceSaveThem_thenReturnCachedStories() {
-        `when`(remoteDataSource.getTopStories(anyString())).thenReturn(
+        whenever(remoteDataSource.getTopStories(anyString())).thenReturn(
             Single.just(
                 listOf(
                     story1,
@@ -71,13 +61,8 @@ class MainRepositoryTest {
     @Test
     fun whenCacheIsNotEmptyReloadIsFalse_getStoriesFromRemoteSourceSaveThem_returnCachedStories() {
         localDataSource.saveStoriesToCache(listOf(story3, story4)).blockingAwait()
-        `when`(remoteDataSource.getTopStories(anyString())).thenReturn(
-            Single.just(
-                listOf(
-                    story1,
-                    story2
-                )
-            )
+        whenever(remoteDataSource.getTopStories(anyString())).thenReturn(
+            Single.just(listOf(story1, story2))
         )
 
         repository.getStories(LanguageZone.DEFAULT.getCeId())
@@ -95,7 +80,7 @@ class MainRepositoryTest {
     @Test
     fun whenCacheIsNotEmptyButReloadIsTrue_getStoriesFromRemoteSourceSaveThem_returnCachedStories() {
         localDataSource.saveStoriesToCache(listOf(story3, story4)).blockingAwait()
-        `when`(remoteDataSource.getTopStories(anyString())).thenReturn(
+        whenever(remoteDataSource.getTopStories(anyString())).thenReturn(
             Single.just(
                 listOf(
                     story1,
@@ -115,12 +100,34 @@ class MainRepositoryTest {
             }.assertComplete()
     }
 
+    //--------Setup & Teardown---------//
+    @Before
+    fun setUp() {
+        val uniqueGenerator = org.mockito.kotlin.mock<UniqueGenerator>()
+        whenever(uniqueGenerator.createSourceId(anyString())).thenReturn(sourceId)
+        val mappers = MapperFactory(
+            AndroidTestFactory.pojoMappers(
+                AndroidTestFactory.dateFormatter_clock_ut_date2022_01_2_time0_0_0,
+                uniqueGenerator
+            ),
+            AndroidTestFactory.entityMappers(AndroidTestFactory.dateFormatter_clock_ut_date2022_01_2_time0_0_0),
+            AndroidTestFactory.domainModelMappers()
+        )
+        mainDataBase = mainDataBase(ApplicationProvider.getApplicationContext())
+        localDataSource = LocalDataSource(mainDataBase, mappers)
+        remoteDataSource = mock(RemoteDataSource::class.java)
+        repository = MainRepository(
+            remoteDataSource, localDataSource,
+            AndroidTestFactory.TestRxSchedulersFactory()
+        )
+    }
 
     @After
     fun tearDown() {
         mainDataBase.close()
     }
 
+    //--------Dummy Objects---------//
     companion object {
         private const val sourceId = "sourceId"
         val rssSource = ItemSource(url = "https://abcnews.go.com", text = "ABC News")

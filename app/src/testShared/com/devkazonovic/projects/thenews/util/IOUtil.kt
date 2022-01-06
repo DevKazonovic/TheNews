@@ -1,10 +1,12 @@
-package com.devkazonovic.projects.thenews.testHelp
+package com.devkazonovic.projects.thenews.util
 
 import okhttp3.internal.io.FileSystem
 import okio.buffer
 import java.io.File
 
+/**Singleton that provide some IO Operations for Tests*/
 object IOUtil {
+
     fun findFiles(name: String): File {
         return File(ClassLoader.getSystemResource(name).path)
     }
@@ -21,4 +23,5 @@ object IOUtil {
         }
         return stringBuffer.toString()
     }
+
 }

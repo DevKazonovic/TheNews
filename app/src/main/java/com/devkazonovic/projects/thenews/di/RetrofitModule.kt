@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -18,16 +19,19 @@ object RetrofitModule {
 
     private const val URL = "https://news.google.com/"
 
+    @Singleton
     @Provides
     fun provideHttpLoggingInterceptor(): Interceptor {
         return StethoInterceptor()
     }
 
+    @Singleton
     @Provides
     fun provideOkHttpClient(loggingInterceptor: Interceptor): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
     }
 
+    @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder().apply {
@@ -38,6 +42,7 @@ object RetrofitModule {
         }.build()
     }
 
+    @Singleton
     @Provides
     fun provideGoogleNewsClient(retrofit: Retrofit): GoogleNewsClient {
         return retrofit.create(GoogleNewsClient::class.java)

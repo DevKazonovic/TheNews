@@ -9,7 +9,6 @@ import com.devkazonovic.projects.thenews.domain.model.Story
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.functions.Supplier
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
@@ -29,7 +28,7 @@ class MainRepository @Inject constructor(
                 remoteDataSource.getTopStories(languageZoneId).flatMap { remoteStories ->
                     localDataSource.saveStoriesToCache(remoteStories)
                         .blockingAwait()
-                   localDataSource.getCachedStories()
+                    localDataSource.getCachedStories()
                 }
             } else Single.just(cachedStories)
         }.toResult()
@@ -37,7 +36,7 @@ class MainRepository @Inject constructor(
     }
 
     fun getTopicStories(topicId: String, languageZoneId: String): Single<Resource<List<Story>>> {
-        return remoteDataSource.getTopicStories(topicId, languageZoneId).toResult()
+        return remoteDataSource.getTopicStories(ceid = languageZoneId, topicId = topicId).toResult()
     }
 
     fun getReadLaterStories(): Flowable<Resource<List<Story>>> {
@@ -46,7 +45,7 @@ class MainRepository @Inject constructor(
     }
 
     fun searchByKeyword(keyword: String, languageZoneId: String): Single<Resource<List<Story>>> {
-        return remoteDataSource.searchByKeyword(keyword, languageZoneId).toResult()
+        return remoteDataSource.searchByKeyword(ceid = languageZoneId, keyword = keyword).toResult()
     }
 
     fun saveStoryToReadLater(story: Story): Completable {

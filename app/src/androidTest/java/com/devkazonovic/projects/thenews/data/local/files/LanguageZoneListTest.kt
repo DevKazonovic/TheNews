@@ -15,11 +15,6 @@ class LanguageZoneListTest {
 
     private lateinit var instrumentationContext: Context
 
-    @Before
-    fun setUp() {
-        instrumentationContext = ApplicationProvider.getApplicationContext()
-    }
-
     @Test
     fun getListOfSupportedLanguagesAndZonesFromGoogleNews() {
         val actual = LanguageZoneList(instrumentationContext).getList()
@@ -29,5 +24,9 @@ class LanguageZoneListTest {
         }
     }
 
-
+    //--------Setup & Teardown---------//
+    @Before
+    fun setUp() {
+        instrumentationContext = ApplicationProvider.getApplicationContext()
+    }
 }

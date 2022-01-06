@@ -1,24 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <rss>
     <channel>
+        <generator>NFE/5.0</generator>
+        <title>Top stories - Google News</title>
+        <link>https://news.google.com/</link>
+        <language>en-US</language>
+        <webMaster>news-webmaster@google.com</webMaster>
+        <copyright>2022 Google Inc.</copyright>
+        <lastBuildDate>San, 01 Jan 2022 08:00:00 GMT</lastBuildDate>
+        <description>Google News</description>
         <item>
-            <title>Title1</title>
-            <link>link1</link>
-            <pubDate>date1</pubDate>
-            <source url="url1">source1</source>
+            <title>Aljazeera Article Title</title>
+            <link>https://www.aljazeera.com/sports/2022/1/5/path</link>
+            <pubDate>San, 01 Jan 2022 05:00:00 GMT</pubDate>
+            <source url="https://www.aljazeera.com/">Aljazeera</source>
         </item>
 
         <item>
-            <title>Title1</title>
-            <link>link1</link>
-            <pubDate>date1</pubDate>
-            <source url="url1">source1</source>
-        </item>
-
-        <item>
-            <title>Title1</title>
-            <link>link1</link>
-            <pubDate>date1</pubDate>
-            <source url="url1">source1</source>
+            <title>Aljazeera Article Title</title>
+            <link>https://www.aljazeera.com/sports/2022/1/5/path</link>
+            <pubDate>San, 01 Jan 2022 05:00:00 GMT</pubDate>
+            <source url="https://www.aljazeera.com/">Aljazeera</source>
         </item>
     </channel>
 </rss>

@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.room.Room
 import com.devkazonovic.projects.thenews.common.util.RxSchedulers
 import com.devkazonovic.projects.thenews.data.local.database.MainDataBase
+import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.GoogleNewsClient
 import com.devkazonovic.projects.thenews.domain.mapper.*
 import com.devkazonovic.projects.thenews.service.DateTimeFormatter
 import com.devkazonovic.projects.thenews.service.UniqueGenerator
+import com.devkazonovic.projects.thenews.util.DateUtil
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.threeten.bp.Clock
+import org.threeten.bp.ZoneOffset
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
@@ -34,56 +37,49 @@ object AndroidTestFactory {
         addInterceptor(HttpLoggingInterceptor { Timber.d(it) }.setLevel(HttpLoggingInterceptor.Level.BODY))
     }.build()
 
-    fun googleNewsRssRetrofit(
-        baseUrl: String,
-        ioScheduler: Scheduler = Schedulers.io()
-    ): Retrofit = Retrofit.Builder().apply {
+    fun googleNewsRssRetrofit(baseUrl: String, ioScheduler: Scheduler = Schedulers.io())
+            : Retrofit = Retrofit.Builder().apply {
         baseUrl(baseUrl)
         client(okHttpClient)
         addCallAdapterFactory(RxJava3CallAdapterFactory.createWithScheduler(ioScheduler))
         addConverterFactory(SimpleXmlConverterFactory.create())
     }.build()
 
-    fun mainDataBase(
-        context: Context
-    ): MainDataBase {
+    val googleNewsClientForTest =
+        googleNewsRssRetrofit(URL_GOOGLE_NEWS_FEED, Schedulers.trampoline())
+            .create(GoogleNewsClient::class.java)
+
+    fun mainDataBase(context: Context): MainDataBase {
         return Room.inMemoryDatabaseBuilder(context, MainDataBase::class.java)
             .allowMainThreadQueries()
             .build()
     }
 
 
-    val dateTimeFormatter = DateTimeFormatter(
-        Clock.systemUTC()
-    )
-    val sourcePojoMapper = SourcePojoMapper(UniqueGenerator())
-    val storyPojoMapper = StoryPojoMapper(
-        sourcePojoMapper, DateTimeFormatter(Clock.systemUTC())
-    )
-    val sourceEntityMapper = SourceEntityMapper()
-    val storyEntityMapper =
-        StoryEntityMapper(sourceEntityMapper, DateTimeFormatter(Clock.systemUTC()))
-    val savedStoryEntityMapper =
-        SavedStoryMapper(sourceEntityMapper, DateTimeFormatter(Clock.systemUTC()))
+    val dateFormatter_clock_ut_date2022_01_2_time0_0_0 =
+        DateTimeFormatter(Clock.fixed(DateUtil.utc_date2022_01_2_time0_0_0(), ZoneOffset.UTC))
 
-    val sourceModelMapper = SourceModelMapper()
-    val storyModelMapper = StoryModelMapper(sourceModelMapper)
-    val savedStoryModelMapper = SavedStoryModelMapper(sourceModelMapper)
+    fun domainModelMappers(): DomainModelMappers {
+        val sourceModelMapper = SourceModelMapper()
+        val storyModelMapper = StoryModelMapper(sourceModelMapper)
+        val savedStoryModelMapper = SavedStoryModelMapper(sourceModelMapper)
+        return DomainModelMappers(storyModelMapper, savedStoryModelMapper, sourceModelMapper)
+    }
 
-    val mapper = MapperFactory(
-        PojoMappers(
-            storyPojoMapper,
-            sourcePojoMapper
-        ),
-        EntityMappers(
-            storyEntityMapper,
-            sourceEntityMapper,
-            savedStoryEntityMapper
-        ),
-        DomainModelMappers(
-            storyModelMapper,
-            savedStoryModelMapper,
-            sourceModelMapper
-        )
-    )
+    fun entityMappers(dateTimeFormatter: DateTimeFormatter): EntityMappers {
+        val sourceEntityMapper = SourceEntityMapper()
+        val storyEntityMapper = StoryEntityMapper(sourceEntityMapper, dateTimeFormatter)
+        val savedStoryEntityMapper = SavedStoryMapper(sourceEntityMapper, dateTimeFormatter)
+        return EntityMappers(storyEntityMapper, sourceEntityMapper, savedStoryEntityMapper)
+    }
+
+    fun pojoMappers(
+        dateTimeFormatter: DateTimeFormatter,
+        uniqueGenerator: UniqueGenerator
+    ): PojoMappers {
+        val sourcePojoMapper = SourcePojoMapper(uniqueGenerator)
+        val storyPojoMapper = StoryPojoMapper(sourcePojoMapper, dateTimeFormatter)
+        return PojoMappers(storyPojoMapper, sourcePojoMapper)
+    }
+
 }
