@@ -1,20 +1,33 @@
 package com.devkazonovic.projects.thenews.data.local.sharedpref
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import com.devkazonovic.projects.thenews.domain.model.LanguageZone
-import dagger.hilt.android.qualifiers.ApplicationContext
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 private const val KEY_LANGUAGE_ZONE = "Current Selected Language-Zone"
 
 
 class LocalKeyValue @Inject constructor(
-    @ApplicationContext context: Context
+    private val preferences: SharedPreferences
 ) {
+    private val _behaviorSubject =
+        BehaviorSubject.createDefault(getLanguageZone())
+    private val listener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (KEY_LANGUAGE_ZONE == key) {
+                _behaviorSubject.onNext(
+                    sharedPreferences.getString(
+                        key,
+                        LanguageZone.DEFAULT.getCeId()
+                    )
+                )
+            }
+        }
 
-    private val preferences =
-        context.getSharedPreferences(context.packageName, MODE_PRIVATE)
+    init {
+        preferences.registerOnSharedPreferenceChangeListener(listener)
+    }
 
     fun saveLanguageZone(ceid: String): Boolean {
         return with(preferences.edit()) {
@@ -26,4 +39,11 @@ class LocalKeyValue @Inject constructor(
         return preferences.getString(KEY_LANGUAGE_ZONE, LanguageZone.DEFAULT.getCeId())
             ?: LanguageZone.DEFAULT.getCeId()
     }
+
+    fun stopObservingSharedPreference() {
+        behaviorSubject.onComplete()
+        preferences.unregisterOnSharedPreferenceChangeListener(listener)
+    }
+
+    val behaviorSubject: BehaviorSubject<String> get() = _behaviorSubject
 }

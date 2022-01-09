@@ -13,6 +13,12 @@ abstract class StoriesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(vararg storyEntity: StoryEntity): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insertAndReturn(storyEntity: StoryEntity): Single<Long>
+
+    @Query("UPDATE story SET isReadLater=:save WHERE url=:storyUrl")
+    abstract fun updateStorySaveState(storyUrl: String, save: Int): Completable
+
     @Delete
     abstract fun delete(vararg storyEntity: StoryEntity): Completable
 

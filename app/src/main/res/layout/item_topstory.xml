@@ -88,18 +88,18 @@
                         android:layout_marginEnd="8dp"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/icStoryMenu2"
+                        app:layout_constraintEnd_toStartOf="@+id/icStoryMenu"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="TextView" />
 
                     <ImageView
-                        android:id="@+id/icStoryMenu2"
+                        android:id="@+id/icStoryMenu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"

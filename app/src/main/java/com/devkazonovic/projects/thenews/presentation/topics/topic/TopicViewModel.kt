@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation.headlines.headline
+package com.devkazonovic.projects.thenews.presentation.topics.topic
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,32 +6,45 @@ import androidx.lifecycle.ViewModel
 import com.devkazonovic.projects.thenews.common.util.RxSchedulers
 import com.devkazonovic.projects.thenews.data.local.sharedpref.LocalKeyValue
 import com.devkazonovic.projects.thenews.domain.MainRepository
+import com.devkazonovic.projects.thenews.domain.model.LanguageZone
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 @HiltViewModel
-class HeadlineViewModel @Inject constructor(
+class TopicViewModel @Inject constructor(
     private val repository: MainRepository,
     private val localKeyValue: LocalKeyValue,
     private val schedulers: RxSchedulers
 ) : ViewModel() {
 
+    private val rxDisposable = CompositeDisposable()
+    private var ceid = LanguageZone.DEFAULT.getCeId()
     private val _stories = MutableLiveData<Resource<List<Story>>>()
-    private var _languageZoneId = localKeyValue.getLanguageZone()
     private val _topicId = MutableLiveData<String>()
 
-    fun load() {
+    init {
+        localKeyValue.behaviorSubject
+            .observeOn(schedulers.uiScheduler())
+            .subscribe { languageZone ->
+                ceid = languageZone
+                loadData()
+            }.addTo(rxDisposable)
+
+    }
+
+    fun loadData() {
         _stories.postValue(Resource.Loading())
-        _languageZoneId = localKeyValue.getLanguageZone()
         _topicId.value?.let {
-            repository.getTopicStories(topicId = it, languageZoneId = _languageZoneId)
+            repository.getTopicStories(topicId = it, languageZoneId = ceid)
                 .subscribeOn(schedulers.ioScheduler())
                 .observeOn(schedulers.uiScheduler())
                 .subscribe { resource ->
                     _stories.postValue(resource)
-                }
+                }.addTo(rxDisposable)
         }
     }
 
@@ -40,5 +53,11 @@ class HeadlineViewModel @Inject constructor(
     }
 
     val stories: LiveData<Resource<List<Story>>> get() = _stories
+
+    override fun onCleared() {
+        super.onCleared()
+        localKeyValue.stopObservingSharedPreference()
+        rxDisposable.clear()
+    }
 
 }

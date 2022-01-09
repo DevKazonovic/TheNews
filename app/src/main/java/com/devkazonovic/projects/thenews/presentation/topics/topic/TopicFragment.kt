@@ -1,4 +1,4 @@
-package com.devkazonovic.projects.thenews.presentation.headlines.headline
+package com.devkazonovic.projects.thenews.presentation.topics.topic
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devkazonovic.projects.thenews.R
 import com.devkazonovic.projects.thenews.common.extensions.hide
 import com.devkazonovic.projects.thenews.common.extensions.show
+import com.devkazonovic.projects.thenews.common.util.IntentUtil
 import com.devkazonovic.projects.thenews.common.util.ViewUtil
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
 import com.devkazonovic.projects.thenews.databinding.FragmentHeadlineBinding
@@ -19,6 +20,7 @@ import com.devkazonovic.projects.thenews.databinding.LayoutLoadingBinding
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
+import com.devkazonovic.projects.thenews.presentation.common.storymenu.StoryMenuFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -40,7 +42,7 @@ class HeadlineFragment : Fragment() {
 
     @Inject
     lateinit var articleScrapper: ArticleScrapper
-    private val viewModel: HeadlineViewModel by viewModels()
+    private val viewModel: TopicViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,9 +62,8 @@ class HeadlineFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpList()
+        setUpStoriesRecyclerView()
         viewModel.setTopicId(topicId)
-        viewModel.load()
         viewModel.stories.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
@@ -80,6 +81,7 @@ class HeadlineFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        adapter.dispose.clear()
         _binding = null
     }
 
@@ -92,10 +94,13 @@ class HeadlineFragment : Fragment() {
         }
     }
 
-    private fun setUpList() {
+    private fun setUpStoriesRecyclerView() {
         rvHeadlines.layoutManager = LinearLayoutManager(requireContext())
-        adapter = StoriesListAdapter(requireContext(), articleScrapper, {
-        }, {})
+        adapter = StoriesListAdapter(this, articleScrapper, {
+            onStoryClick(it)
+        }, {
+            onStoryMenuClick(it)
+        })
         rvHeadlines.adapter = adapter
     }
 
@@ -119,6 +124,17 @@ class HeadlineFragment : Fragment() {
         layoutError.show()
         layoutError.txTitle.text = getString(R.string.errors_title)
         layoutError.txSubtitle.text = description
+        layoutError.btnActionError.setOnClickListener {
+            viewModel.loadData()
+        }
+    }
+
+    private fun onStoryMenuClick(story: Story) {
+        StoryMenuFragment.newInstance(story).show(childFragmentManager, StoryMenuFragment.TAG)
+    }
+
+    private fun onStoryClick(it: Story) {
+        IntentUtil.openUrl(requireContext(), it.url)
     }
 
     companion object {

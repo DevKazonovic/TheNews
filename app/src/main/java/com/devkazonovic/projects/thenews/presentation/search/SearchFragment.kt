@@ -17,6 +17,7 @@ import com.devkazonovic.projects.thenews.R
 import com.devkazonovic.projects.thenews.common.extensions.hide
 import com.devkazonovic.projects.thenews.common.extensions.setMainPageToolbar
 import com.devkazonovic.projects.thenews.common.extensions.show
+import com.devkazonovic.projects.thenews.common.util.IntentUtil
 import com.devkazonovic.projects.thenews.common.util.ViewUtil
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
 import com.devkazonovic.projects.thenews.databinding.FragmentSearchBinding
@@ -25,6 +26,7 @@ import com.devkazonovic.projects.thenews.databinding.LayoutLoadingBinding
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
+import com.devkazonovic.projects.thenews.presentation.common.storymenu.StoryMenuFragment
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -63,7 +65,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initStoriesList()
+        setUpStoriesRecyclerView()
         tfSearch.editText?.doOnTextChanged { text, _, _, _ ->
             Timber.d(text.toString())
             viewModel.setSearchKeyWord(text?.trim().toString())
@@ -87,6 +89,7 @@ class SearchFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        storiesListAdapter.dispose.clear()
         _binding = null
     }
 
@@ -102,12 +105,15 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun initStoriesList() {
-        storiesListAdapter = StoriesListAdapter(requireContext(), articleScrapper, {
-            Timber.d(it.url)
-        }, {})
+    private fun setUpStoriesRecyclerView() {
+        storiesListAdapter = StoriesListAdapter(this, articleScrapper, {
+            onStoryClick(it)
+        }, {
+            onStoryMenuClick(it)
+        })
         rvSearchStory.layoutManager = LinearLayoutManager(requireContext())
         rvSearchStory.adapter = storiesListAdapter
+
     }
 
     private fun onLoading() {
@@ -132,6 +138,14 @@ class SearchFragment : Fragment() {
         layoutError.show()
         layoutError.txTitle.text = getString(R.string.errors_title)
         layoutError.txSubtitle.text = description
+    }
+
+    private fun onStoryMenuClick(story: Story) {
+        StoryMenuFragment.newInstance(story).show(childFragmentManager, StoryMenuFragment.TAG)
+    }
+
+    private fun onStoryClick(it: Story) {
+        IntentUtil.openUrl(requireContext(), it.url)
     }
 
     companion object {

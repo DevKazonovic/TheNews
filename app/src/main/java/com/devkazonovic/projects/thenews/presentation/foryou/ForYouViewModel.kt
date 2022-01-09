@@ -10,6 +10,8 @@ import com.devkazonovic.projects.thenews.domain.model.LanguageZone
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,22 +21,36 @@ class ForYouViewModel @Inject constructor(
     private val schedulers: RxSchedulers
 ) : ViewModel() {
 
-    private var reload = true
-    private var ceid = LanguageZone.DEFAULT.getCeId()
+    private val rxDisposable = CompositeDisposable()
 
+    private var ceid = LanguageZone.DEFAULT.getCeId()
     private val _stories = MutableLiveData<Resource<List<Story>>>()
+
+    init {
+        localKeyValue.behaviorSubject
+            .observeOn(schedulers.uiScheduler())
+            .subscribe { languageZone ->
+                ceid = languageZone
+                loadData()
+            }.addTo(rxDisposable)
+
+    }
 
     fun loadData() {
         _stories.value = Resource.Loading()
-        ceid = localKeyValue.getLanguageZone()
-        mainRepository.getStories(ceid, reload)
+        mainRepository.getStories(ceid, true)
             .subscribeOn(schedulers.ioScheduler())
             .observeOn(schedulers.uiScheduler())
             .subscribe { resource ->
                 _stories.postValue(resource)
-                reload = false
-            }
+            }.addTo(rxDisposable)
     }
 
     val stories: LiveData<Resource<List<Story>>> = _stories
+
+    override fun onCleared() {
+        super.onCleared()
+        localKeyValue.stopObservingSharedPreference()
+        rxDisposable.clear()
+    }
 }

@@ -9,6 +9,8 @@ import com.devkazonovic.projects.thenews.domain.MainRepository
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,9 +20,20 @@ class SearchViewModel @Inject constructor(
     private val schedulers: RxSchedulers
 ) : ViewModel() {
 
+    private val rxDisposable = CompositeDisposable()
+
+    private val ceid = localKeyValue.getLanguageZone()
     private val _keyword = MutableLiveData<String>()
     private val _result = MutableLiveData<Resource<List<Story>>>()
-    private val ceid = localKeyValue.getLanguageZone()
+
+    init {
+        //load trending news
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        rxDisposable.clear()
+    }
 
     fun search() {
         _result.value = Resource.Loading()
@@ -30,6 +43,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(schedulers.ioScheduler())
                     .observeOn(schedulers.uiScheduler())
                     .subscribe { success -> _result.postValue(success) }
+                    .addTo(rxDisposable)
             }
         }
     }

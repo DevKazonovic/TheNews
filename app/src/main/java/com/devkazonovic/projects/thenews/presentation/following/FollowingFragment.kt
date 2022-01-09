@@ -16,6 +16,7 @@ import com.devkazonovic.projects.thenews.R
 import com.devkazonovic.projects.thenews.common.extensions.hide
 import com.devkazonovic.projects.thenews.common.extensions.setMainPageToolbar
 import com.devkazonovic.projects.thenews.common.extensions.show
+import com.devkazonovic.projects.thenews.common.util.IntentUtil
 import com.devkazonovic.projects.thenews.common.util.ViewUtil
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
 import com.devkazonovic.projects.thenews.databinding.FragmentFollowingBinding
@@ -24,6 +25,7 @@ import com.devkazonovic.projects.thenews.databinding.LayoutLoadingBinding
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
+import com.devkazonovic.projects.thenews.presentation.common.storymenu.StoryMenuFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -61,8 +63,7 @@ class FollowingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpRecyclerView()
-        viewModel.load()
+        setUpStoriesRecyclerView()
         viewModel.savedStories.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
@@ -80,6 +81,7 @@ class FollowingFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        storiesListAdapter.dispose.clear()
         _binding = null
     }
 
@@ -94,11 +96,11 @@ class FollowingFragment : Fragment() {
         }
     }
 
-    private fun setUpRecyclerView() {
-        storiesListAdapter = StoriesListAdapter(requireContext(), articleScrapper, {
-
+    private fun setUpStoriesRecyclerView() {
+        storiesListAdapter = StoriesListAdapter(this, articleScrapper, {
+            onStoryClick(it)
         }, {
-
+            onStoryMenuClick(it)
         })
 
         rvSavedStories.layoutManager = LinearLayoutManager(requireContext())
@@ -129,9 +131,15 @@ class FollowingFragment : Fragment() {
         layoutError.txSubtitle.text = description
     }
 
+    private fun onStoryMenuClick(story: Story) {
+        StoryMenuFragment.newInstance(story).show(childFragmentManager, StoryMenuFragment.TAG)
+    }
+
+    private fun onStoryClick(it: Story) {
+        IntentUtil.openUrl(requireContext(), it.url)
+    }
 
     companion object {
-
         @JvmStatic
         fun newInstance() = FollowingFragment()
     }

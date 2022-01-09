@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import com.devkazonovic.projects.thenews.R
+import com.devkazonovic.projects.thenews.common.util.IntentUtil
 import com.devkazonovic.projects.thenews.databinding.LayoutMenuStoryBinding
 import com.devkazonovic.projects.thenews.domain.model.Story
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,19 +26,15 @@ class StoryMenuFragment : BottomSheetDialogFragment() {
 
     private var _binding: LayoutMenuStoryBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var itemSaveStory: ViewGroup
     private lateinit var itemShareStory: ViewGroup
     private lateinit var itemOpenSource: ViewGroup
-
     private lateinit var imageViewSaveStory: ImageView
     private lateinit var imageViewShareStory: ImageView
     private lateinit var imageViewOpenSource: ImageView
-
     private lateinit var textViewSaveStory: TextView
     private lateinit var textViewShareStory: TextView
     private lateinit var textViewOpenSource: TextView
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +55,7 @@ class StoryMenuFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.setStory(story)
-
+        updateViews()
         viewModel.isActionCompleted.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let {
                 if (it) dismiss()
@@ -66,7 +63,13 @@ class StoryMenuFragment : BottomSheetDialogFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun initViews() {
+
         binding.let {
             itemSaveStory = binding.itemSaveStory
             itemShareStory = binding.itemShareStory
@@ -79,34 +82,42 @@ class StoryMenuFragment : BottomSheetDialogFragment() {
             textViewOpenSource = binding.textViewOpenSource
         }
 
-        story?.let {
-            if (story!!.isSaved) {
-                textViewSaveStory.text = getString(R.string.label_remove_story)
-                imageViewSaveStory.setImageResource(R.drawable.ic_bookmarked)
-            } else {
-                textViewSaveStory.text = getString(R.string.label_save_for_later)
-                imageViewSaveStory.setImageResource(R.drawable.ic_bookmark)
-            }
-        }
-
         itemSaveStory.setOnClickListener {
-            if (story!!.isSaved) viewModel.removeStoryFromReadLater()
+            if (viewModel.isCurrentStorySavedToReadLater()) viewModel.removeStoryFromReadLater()
             else viewModel.saveStoryToReadLater()
 
             dismiss()
         }
-        itemShareStory.setOnClickListener {
 
+        itemShareStory.setOnClickListener { view ->
+            viewModel.story?.let {
+                shareStoryUrl(it)
+            }
         }
 
-        itemOpenSource.setOnClickListener {
-
+        itemOpenSource.setOnClickListener { view ->
+            viewModel.story?.let {
+                openStorySource(it)
+            }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun updateViews() {
+        if (viewModel.isCurrentStorySavedToReadLater()) {
+            textViewSaveStory.text = getString(R.string.label_remove_story)
+            imageViewSaveStory.setImageResource(R.drawable.ic_bookmarked)
+        } else {
+            textViewSaveStory.text = getString(R.string.label_save_for_later)
+            imageViewSaveStory.setImageResource(R.drawable.ic_bookmark)
+        }
+    }
+
+    private fun shareStoryUrl(story: Story) {
+        IntentUtil.sharedUrl(requireContext(), story)
+    }
+
+    private fun openStorySource(story: Story) {
+        IntentUtil.openUrl(requireContext(), story.source.url)
     }
 
     companion object {

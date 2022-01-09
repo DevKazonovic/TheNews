@@ -1,12 +1,10 @@
 package com.devkazonovic.projects.thenews.presentation.foryou
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -21,6 +19,7 @@ import com.devkazonovic.projects.thenews.R
 import com.devkazonovic.projects.thenews.common.extensions.hide
 import com.devkazonovic.projects.thenews.common.extensions.setMainPageToolbar
 import com.devkazonovic.projects.thenews.common.extensions.show
+import com.devkazonovic.projects.thenews.common.util.IntentUtil
 import com.devkazonovic.projects.thenews.common.util.ViewUtil.hide
 import com.devkazonovic.projects.thenews.common.util.ViewUtil.show
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ArticleScrapper
@@ -56,6 +55,7 @@ class ForYouFragment : Fragment() {
     private lateinit var viewPagerTopStories: ViewPager2
     private lateinit var rvTopStoriesCarouselState: RecyclerView
     private lateinit var rvStories: RecyclerView
+
     private lateinit var storiesListAdapter: StoriesListAdapter
     private lateinit var topStoriesCarouselItemsAdapter: CarouselAdapter
     private lateinit var carouselCarouselStateAdapter: CarouselStateAdapter
@@ -64,9 +64,8 @@ class ForYouFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentForyouBinding.inflate(inflater, container, false)
-        navController = findNavController()
         initViews()
-        toolbar.setMainPageToolbar(navController, drawerLayout)
+        toolbar.setMainPageToolbar(findNavController(), drawerLayout)
         return binding.root
     }
 
@@ -74,7 +73,7 @@ class ForYouFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpStoriesRecyclerView()
         setUpTopFiveStoriesCarousel()
-        viewModel.loadData()
+
         viewModel.stories.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
@@ -92,6 +91,7 @@ class ForYouFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        storiesListAdapter.dispose.clear()
         _binding = null
     }
 
@@ -106,6 +106,8 @@ class ForYouFragment : Fragment() {
             rvTopStoriesCarouselState = it.recyclerViewState
             rvStories = it.rvStories
         }
+
+
     }
 
     private fun setUpTopFiveStoriesCarousel() {
@@ -127,7 +129,7 @@ class ForYouFragment : Fragment() {
     }
 
     private fun setUpStoriesRecyclerView() {
-        storiesListAdapter = StoriesListAdapter(requireActivity(), articleScrapper, {
+        storiesListAdapter = StoriesListAdapter(this, articleScrapper, {
             onStoryClick(it)
         }, {
             onStoryMenuClick(it)
@@ -141,9 +143,7 @@ class ForYouFragment : Fragment() {
     }
 
     private fun onStoryClick(it: Story) {
-        val customTabsIntent = CustomTabsIntent.Builder().apply {
-        }.build()
-        customTabsIntent.launchUrl(requireContext(), Uri.parse(it.url))
+        IntentUtil.openUrl(requireContext(), it.url)
     }
 
     private fun onLoading() {
@@ -159,7 +159,7 @@ class ForYouFragment : Fragment() {
             if (it.isNotEmpty()) {
                 storiesListAdapter.submitList(it.subList(6, it.size))
                 topStoriesCarouselItemsAdapter =
-                    CarouselAdapter(requireActivity(), it.subList(0, 5))
+                    CarouselAdapter(lifecycle, childFragmentManager, it.subList(0, 5))
                 viewPagerTopStories.adapter = topStoriesCarouselItemsAdapter
             }
         }
@@ -171,6 +171,9 @@ class ForYouFragment : Fragment() {
         layoutError.show()
         layoutError.txTitle.text = getString(R.string.errors_title)
         layoutError.txSubtitle.text = description
+        layoutError.btnActionError.setOnClickListener {
+            viewModel.loadData()
+        }
     }
 
     companion object {

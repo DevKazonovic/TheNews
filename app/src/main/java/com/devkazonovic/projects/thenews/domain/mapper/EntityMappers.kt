@@ -43,7 +43,8 @@ class StoryEntityMapper @Inject constructor(
                 title = it.title,
                 publishDate = it.publishDate,
                 source = sourceEntityMapper.toDomainModel(it.sourceEntity),
-                publishDateFormat = dateTimeFormatter.calcTimePassed(it.publishDate)
+                publishDateFormat = dateTimeFormatter.calcTimePassed(it.publishDate),
+                isSaved = it.isReadLater == 1
             )
         } ?: Story.EMPTY
     }

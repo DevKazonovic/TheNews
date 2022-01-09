@@ -1,12 +1,11 @@
 package com.devkazonovic.projects.thenews.data
 
+import com.devkazonovic.projects.thenews.common.util.ConvertersUtil
 import com.devkazonovic.projects.thenews.data.local.database.MainDataBase
+import com.devkazonovic.projects.thenews.data.local.database.entity.SavedStoryEntity
 import com.devkazonovic.projects.thenews.domain.mapper.Mappers
 import com.devkazonovic.projects.thenews.domain.model.Story
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.core.*
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
@@ -26,7 +25,9 @@ class LocalDataSource @Inject constructor(
     fun getStoriesReadLater(): Flowable<List<Story>> {
         return readLaterDao.findAll()
             .map { stories ->
-                stories.map { mappers.entityMappers().savedStoryMapper().toDomainModel(it) }
+                stories
+                    .reversed()
+                    .map { mappers.entityMappers().savedStoryMapper().toDomainModel(it) }
             }
     }
 
@@ -42,6 +43,12 @@ class LocalDataSource @Inject constructor(
         )
     }
 
+    fun saveStory(story: Story): Single<Long> {
+        return storiesDao.insertAndReturn(
+            mappers.domainModelMappers().storyModelMapper().toEntity(story)
+        )
+    }
+
     fun saveStoriesToCache(stories: List<Story>): Completable {
         return Observable.fromIterable(stories)
             .map { item -> mappers.domainModelMappers().storyModelMapper().toEntity(item) }
@@ -50,8 +57,16 @@ class LocalDataSource @Inject constructor(
             }
     }
 
+    fun updateStorySaveState(story: Story, save: Boolean): Completable {
+        return storiesDao.updateStorySaveState(story.url, ConvertersUtil.fromBooleanToInt(save))
+    }
+
     fun deleteAllCachedStories() {
         storiesDao.deleteTopStories()
+    }
+
+    fun isStorySaved(url: String): Maybe<SavedStoryEntity> {
+        return readLaterDao.isStorySaved(url)
     }
 
 }

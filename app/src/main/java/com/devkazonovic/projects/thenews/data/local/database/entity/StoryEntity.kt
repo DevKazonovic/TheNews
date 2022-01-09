@@ -7,18 +7,16 @@ import java.io.Serializable
 
 @Entity(tableName = "story")
 data class StoryEntity(
-    val url: String,
+    @PrimaryKey val url: String,
     val title: String,
     @Embedded val sourceEntity: SourceEntity,
     val topicId: String? = null,
     val imgUrl: String = "",
     val publishDate: String = "",
     val description: String = "",
-    val author: String = ""
+    val author: String = "",
+    val isReadLater: Int = 0
 ) : Serializable {
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
-
 
     companion object {
         const val NO_SOURCE_VALUE = "NON"

@@ -14,7 +14,7 @@
         android:label="" />
     <fragment
         android:id="@+id/headlinesPage"
-        android:name="com.devkazonovic.projects.thenews.presentation.headlines.HeadlinesFragment"
+        android:name="com.devkazonovic.projects.thenews.presentation.topics.TopicsFragment"
         android:label="Headlines" />
     <fragment
         android:id="@+id/forYouPage"
@@ -22,6 +22,5 @@
         android:label="For You" />
     <fragment
         android:id="@+id/languageSettingPage"
-        android:name="com.devkazonovic.projects.thenews.presentation.setting.LanguageSettingFragment"
-        android:label="Languages &amp; Regions" />
+        android:name="com.devkazonovic.projects.thenews.presentation.setting.LanguageSettingFragment" />
 </navigation>

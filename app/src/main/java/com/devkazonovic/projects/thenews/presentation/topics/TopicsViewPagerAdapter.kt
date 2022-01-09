@@ -1,11 +1,11 @@
-package com.devkazonovic.projects.thenews.presentation.headlines
+package com.devkazonovic.projects.thenews.presentation.topics
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.devkazonovic.projects.thenews.domain.model.Topic
-import com.devkazonovic.projects.thenews.presentation.headlines.headline.HeadlineFragment
+import com.devkazonovic.projects.thenews.presentation.topics.topic.HeadlineFragment
 
 class TopicsViewPagerAdapter(
     fragmentManager: FragmentManager,

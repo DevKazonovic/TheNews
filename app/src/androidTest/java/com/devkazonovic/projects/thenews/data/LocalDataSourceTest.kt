@@ -93,6 +93,17 @@ class LocalDataSourceTest {
             }
     }
 
+    @Test
+    fun test_updateStorySaveState(){
+        localDataSource.saveStory(story1)
+            .subscribe {id ->
+                localDataSource.updateStorySaveState(id.toInt(),true)
+                    .test()
+                    .assertComplete()
+            }
+
+    }
+
     //--------Setup & Teardown---------//
     @Before
     fun setUp() {

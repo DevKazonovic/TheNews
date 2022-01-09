@@ -4,10 +4,12 @@ import com.devkazonovic.projects.thenews.common.extensions.toResult
 import com.devkazonovic.projects.thenews.common.util.RxSchedulers
 import com.devkazonovic.projects.thenews.data.LocalDataSource
 import com.devkazonovic.projects.thenews.data.RemoteDataSource
+import com.devkazonovic.projects.thenews.data.local.database.entity.SavedStoryEntity
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
@@ -20,11 +22,6 @@ class MainRepository @Inject constructor(
     fun getStories(languageZoneId: String, reload: Boolean = false): Single<Resource<List<Story>>> {
         return localDataSource.getCachedStories().flatMap { cachedStories ->
             if (cachedStories.isEmpty() || reload) {
-                if (cachedStories.isNotEmpty())
-                    Completable.fromCallable {
-                        localDataSource.deleteAllCachedStories()
-                    }.subscribeOn(rxSchedulers.ioScheduler()).subscribe()
-
                 remoteDataSource.getTopStories(languageZoneId).flatMap { remoteStories ->
                     localDataSource.saveStoriesToCache(remoteStories)
                         .blockingAwait()
@@ -54,6 +51,14 @@ class MainRepository @Inject constructor(
 
     fun deleteStoryToReadLater(story: Story): Completable {
         return localDataSource.deleteStoryToReadLater(story)
+    }
+
+    fun updateStorySaveState(story: Story, save: Boolean): Completable {
+        return localDataSource.updateStorySaveState(story, save)
+    }
+
+    fun isStorySavedToReadLater(url: String): Maybe<SavedStoryEntity> {
+        return localDataSource.isStorySaved(url)
     }
 
 }

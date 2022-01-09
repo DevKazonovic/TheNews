@@ -1,5 +1,6 @@
 package com.devkazonovic.projects.thenews.domain.mapper
 
+import com.devkazonovic.projects.thenews.common.util.ConvertersUtil
 import com.devkazonovic.projects.thenews.data.local.database.entity.SavedStoryEntity
 import com.devkazonovic.projects.thenews.data.local.database.entity.SourceEntity
 import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
@@ -41,7 +42,8 @@ class StoryModelMapper @Inject constructor(
                 url = it.url,
                 title = it.title,
                 publishDate = it.publishDate,
-                sourceEntity = sourceModelMapper.toEntity(it.source)
+                sourceEntity = sourceModelMapper.toEntity(it.source),
+                isReadLater = ConvertersUtil.fromBooleanToInt(it.isSaved)
             )
         } ?: StoryEntity.EMPTY
     }
