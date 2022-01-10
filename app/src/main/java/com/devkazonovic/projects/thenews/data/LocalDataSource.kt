@@ -12,16 +12,15 @@ class LocalDataSource @Inject constructor(
     mainDataBase: MainDataBase,
     private val mappers: Mappers
 ) {
-
     private val readLaterDao = mainDataBase.readLaterDao()
     private val storiesDao = mainDataBase.storiesDao()
 
     fun getCachedStories(): Single<List<Story>> {
         return storiesDao.findTopStories().map { stories ->
             stories.map { mappers.entityMappers().storyEntityMapper().toDomainModel(it) }
+
         }
     }
-
     fun getStoriesReadLater(): Flowable<List<Story>> {
         return readLaterDao.findAll()
             .map { stories ->
@@ -30,25 +29,21 @@ class LocalDataSource @Inject constructor(
                     .map { mappers.entityMappers().savedStoryMapper().toDomainModel(it) }
             }
     }
-
     fun saveStoryToReadLater(story: Story): Completable {
         return readLaterDao.insert(
             mappers.domainModelMappers().savedStoryModelMapper().toEntity(story)
         )
     }
-
     fun deleteStoryToReadLater(story: Story): Completable {
         return readLaterDao.delete(
             mappers.domainModelMappers().savedStoryModelMapper().toEntity(story)
         )
     }
-
     fun saveStory(story: Story): Single<Long> {
         return storiesDao.insertAndReturn(
             mappers.domainModelMappers().storyModelMapper().toEntity(story)
         )
     }
-
     fun saveStoriesToCache(stories: List<Story>): Completable {
         return Observable.fromIterable(stories)
             .map { item -> mappers.domainModelMappers().storyModelMapper().toEntity(item) }
@@ -56,15 +51,12 @@ class LocalDataSource @Inject constructor(
                 storiesDao.insert(it)
             }
     }
-
     fun updateStorySaveState(story: Story, save: Boolean): Completable {
         return storiesDao.updateStorySaveState(story.url, ConvertersUtil.fromBooleanToInt(save))
     }
-
     fun deleteAllCachedStories() {
-        storiesDao.deleteTopStories()
+        storiesDao.deleteCachedTopStories()
     }
-
     fun isStorySaved(url: String): Maybe<SavedStoryEntity> {
         return readLaterDao.isStorySaved(url)
     }

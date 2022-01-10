@@ -30,10 +30,7 @@ abstract class StoriesDao {
     @Query("SELECT * FROM story WHERE topicId=:topicId")
     abstract fun findTopicStories(topicId: String): Single<List<StoryEntity>>
 
-    @Query("SELECT * FROM readlater")
-    abstract fun findReadLaterStories(): Flowable<SavedStoryEntity>
-
     @Query("DELETE FROM story")
-    abstract fun deleteTopStories()
+    abstract fun deleteCachedTopStories()
 
 }
