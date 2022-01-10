@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.devkazonovic.projects.thenews.R
@@ -49,7 +50,6 @@ class ForYouFragment : Fragment() {
     private lateinit var layoutData: ViewGroup
     private lateinit var layoutLoad: LayoutLoadingBinding
     private lateinit var layoutError: LayoutErrorBinding
-    private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var viewPagerTopStories: ViewPager2
@@ -107,18 +107,14 @@ class ForYouFragment : Fragment() {
             rvStories = it.rvStories
         }
 
-
+        binding.refreshLayout.setOnRefreshListener {
+            onRefresh()
+            binding.refreshLayout.isRefreshing = false
+        }
     }
 
     private fun setUpTopFiveStoriesCarousel() {
         viewPagerTopStories.setPageTransformer(MarginPageTransformer(28))
-
-        val stateList =
-            CarouselStateAdapter.initStateList(5)
-        carouselCarouselStateAdapter = CarouselStateAdapter(stateList)
-        rvTopStoriesCarouselState.layoutManager =
-            LinearLayoutManager(requireContext(), HORIZONTAL, false)
-        rvTopStoriesCarouselState.adapter = carouselCarouselStateAdapter
         viewPagerTopStories.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -126,6 +122,13 @@ class ForYouFragment : Fragment() {
                 carouselCarouselStateAdapter.updateList(position)
             }
         })
+        val stateList =
+            CarouselStateAdapter.initStateList(5)
+        carouselCarouselStateAdapter = CarouselStateAdapter(stateList)
+        rvTopStoriesCarouselState.layoutManager =
+            LinearLayoutManager(requireContext(), HORIZONTAL, false)
+        rvTopStoriesCarouselState.adapter = carouselCarouselStateAdapter
+
     }
 
     private fun setUpStoriesRecyclerView() {
@@ -146,6 +149,10 @@ class ForYouFragment : Fragment() {
         IntentUtil.openUrl(requireContext(), it.url)
     }
 
+    private fun onRefresh(){
+        viewModel.loadData()
+    }
+
     private fun onLoading() {
         hide(layoutData)
         layoutError.hide()
@@ -157,10 +164,10 @@ class ForYouFragment : Fragment() {
         show(layoutData)
         stories?.let {
             if (it.isNotEmpty()) {
-                storiesListAdapter.submitList(it.subList(6, it.size))
                 topStoriesCarouselItemsAdapter =
-                    CarouselAdapter(lifecycle, childFragmentManager, it.subList(0, 5))
+                    CarouselAdapter(this, it.subList(0, 5))
                 viewPagerTopStories.adapter = topStoriesCarouselItemsAdapter
+                storiesListAdapter.submitList(it.subList(6, it.size))
             }
         }
     }

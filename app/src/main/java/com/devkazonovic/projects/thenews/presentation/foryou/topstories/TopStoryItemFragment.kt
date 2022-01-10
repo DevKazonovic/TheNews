@@ -27,7 +27,7 @@ private const val KEY_STORY = "Story Object"
 private const val KEY_STORY_POSITION = "Story Position In List"
 
 @AndroidEntryPoint
-class TopStoryFragment : Fragment() {
+class TopStoryItemFragment : Fragment() {
 
     private var story: Story? = null
     private var pos: Int? = null
@@ -77,13 +77,12 @@ class TopStoryFragment : Fragment() {
             articleScrapper.getArticleImageUrl(it.url)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { imgUrl ->
-                    Glide.with(imageViewArticleImg.context)
+                    Glide.with(this)
                         .load(imgUrl)
                         .placeholder(R.drawable.ic_placeholder)
                         .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
                         .into(imageViewArticleImg)
-                }
-                .addTo(dispose)
+                }.addTo(dispose)
         }
     }
 
@@ -113,7 +112,7 @@ class TopStoryFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(story: Story, pos: Int) = TopStoryFragment().apply {
+        fun newInstance(story: Story, pos: Int) = TopStoryItemFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(KEY_STORY, story)
                 putInt(KEY_STORY_POSITION, pos)

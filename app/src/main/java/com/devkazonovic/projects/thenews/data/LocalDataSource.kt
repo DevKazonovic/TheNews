@@ -18,14 +18,12 @@ class LocalDataSource @Inject constructor(
     fun getCachedStories(): Single<List<Story>> {
         return storiesDao.findTopStories().map { stories ->
             stories.map { mappers.entityMappers().storyEntityMapper().toDomainModel(it) }
-
         }
     }
     fun getStoriesReadLater(): Flowable<List<Story>> {
         return readLaterDao.findAll()
             .map { stories ->
                 stories
-                    .reversed()
                     .map { mappers.entityMappers().savedStoryMapper().toDomainModel(it) }
             }
     }

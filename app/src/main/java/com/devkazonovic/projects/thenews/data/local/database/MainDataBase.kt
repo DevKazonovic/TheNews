@@ -11,7 +11,7 @@ import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
     entities = [
         StoryEntity::class,
         SavedStoryEntity::class,
-    ], version = 11, exportSchema = false
+    ], version = 12, exportSchema = false
 )
 abstract class MainDataBase : RoomDatabase() {
 
