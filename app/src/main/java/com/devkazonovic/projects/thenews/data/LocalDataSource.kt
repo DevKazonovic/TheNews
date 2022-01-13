@@ -1,62 +1,77 @@
 package com.devkazonovic.projects.thenews.data
 
-import com.devkazonovic.projects.thenews.common.util.ConvertersUtil
 import com.devkazonovic.projects.thenews.data.local.database.MainDataBase
 import com.devkazonovic.projects.thenews.data.local.database.entity.SavedStoryEntity
-import com.devkazonovic.projects.thenews.domain.mapper.Mappers
-import com.devkazonovic.projects.thenews.domain.model.Story
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopStoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopicStoryEntity
+import com.devkazonovic.projects.thenews.data.local.sharedpref.LocalKeyValue
 import io.reactivex.rxjava3.core.*
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
     mainDataBase: MainDataBase,
-    private val mappers: Mappers
+    private val localKeyValue: LocalKeyValue,
 ) {
-    private val readLaterDao = mainDataBase.readLaterDao()
-    private val storiesDao = mainDataBase.storiesDao()
+    //Todo : Write Tests
 
-    fun getCachedStories(): Single<List<Story>> {
-        return storiesDao.findTopStories().map { stories ->
-            stories.map { mappers.entityMappers().storyEntityMapper().toDomainModel(it) }
-        }
+    private val topStoriesDao = mainDataBase.topStoriesDao()
+    private val topicStoriesDao = mainDataBase.topicStoriesDao()
+    private val savedStoriesDao = mainDataBase.savedStoriesDao()
+
+    fun getLocalSavedStories(): Flowable<List<SavedStoryEntity>> {
+        return savedStoriesDao.findAll()
     }
-    fun getStoriesReadLater(): Flowable<List<Story>> {
-        return readLaterDao.findAll()
-            .map { stories ->
-                stories
-                    .map { mappers.entityMappers().savedStoryMapper().toDomainModel(it) }
-            }
+
+    fun getLocalTopStories(): Single<List<TopStoryEntity>> {
+        return topStoriesDao.findAll()
     }
-    fun saveStoryToReadLater(story: Story): Completable {
-        return readLaterDao.insert(
-            mappers.domainModelMappers().savedStoryModelMapper().toEntity(story)
-        )
+
+    fun getLocalTopicStories(topicId: String): Single<List<TopicStoryEntity>> {
+        return topicStoriesDao.findByTopic(topicId)
     }
-    fun deleteStoryToReadLater(story: Story): Completable {
-        return readLaterDao.delete(
-            mappers.domainModelMappers().savedStoryModelMapper().toEntity(story)
-        )
+
+    fun getLanguageZoneObservable(): Observable<String> {
+        return localKeyValue.languageZoneObservable
     }
-    fun saveStory(story: Story): Single<Long> {
-        return storiesDao.insertAndReturn(
-            mappers.domainModelMappers().storyModelMapper().toEntity(story)
-        )
+
+    fun getLanguageZone(): String {
+        return localKeyValue.getLanguageZone()
     }
-    fun saveStoriesToCache(stories: List<Story>): Completable {
-        return Observable.fromIterable(stories)
-            .map { item -> mappers.domainModelMappers().storyModelMapper().toEntity(item) }
-            .flatMapCompletable {
-                storiesDao.insert(it)
-            }
+
+    fun saveLanguageZone(languageZoneId: String): Boolean {
+        return localKeyValue.saveLanguageZone(languageZoneId)
     }
-    fun updateStorySaveState(story: Story, save: Boolean): Completable {
-        return storiesDao.updateStorySaveState(story.url, ConvertersUtil.fromBooleanToInt(save))
+
+    fun saveStoryToSavedStories(story: SavedStoryEntity): Completable {
+        return savedStoriesDao.insert(story)
     }
-    fun deleteAllCachedStories() {
-        storiesDao.deleteCachedTopStories()
+
+    fun saveTopStories(stories: List<TopStoryEntity>): Completable {
+        return topStoriesDao.insert(stories)
     }
+
+    fun saveTopicStories(stories: List<TopicStoryEntity>): Completable {
+        return topicStoriesDao.insert(stories)
+    }
+
+    fun deleteStoryFromSavedStories(story: SavedStoryEntity): Completable {
+        return savedStoriesDao.delete(story)
+    }
+
+    fun deleteAllLocalTopStories() {
+        topStoriesDao.deleteAll()
+    }
+
+    fun deleteLocalTopicStoriesByTopicId(topicId: String) {
+        topicStoriesDao.deleteByTopic(topicId)
+    }
+
+    fun deleteAllLocalTopicStories() {
+        topicStoriesDao.deleteAll()
+    }
+
     fun isStorySaved(url: String): Maybe<SavedStoryEntity> {
-        return readLaterDao.isStorySaved(url)
+        return savedStoriesDao.findByUrl(url)
     }
 
 }

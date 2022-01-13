@@ -47,7 +47,6 @@ class StoriesListAdapter(
                             .placeholder(R.drawable.ic_placeholder)
                             .apply(RequestOptions.bitmapTransform(RoundedCorners(18)))
                             .into(it.imageViewArticleImg)
-
                     }.addTo(dispose)
             }
         }

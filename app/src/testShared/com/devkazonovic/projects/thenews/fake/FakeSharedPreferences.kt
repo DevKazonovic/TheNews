@@ -1,12 +1,12 @@
-package com.devkazonovic.projects.thenews.data.local.sharedpref
+package com.devkazonovic.projects.thenews.fake
 
 import android.content.SharedPreferences
 
 class FakeSharedPreferences : SharedPreferences {
 
-    private  val KEY_LANGUAGE_ZONE = "Current Selected Language-Zone"
-    private val map = mutableMapOf<String?,Any?>()
-    private var listener : SharedPreferences.OnSharedPreferenceChangeListener?=null
+    private val KEY_LANGUAGE_ZONE = "Current Selected Language-Zone"
+    private val map = mutableMapOf<String?, Any?>()
+    private var listener: SharedPreferences.OnSharedPreferenceChangeListener? = null
 
     override fun getAll(): MutableMap<String?, Any?> {
         return map
@@ -52,10 +52,11 @@ class FakeSharedPreferences : SharedPreferences {
         listener = null
     }
 
-    inner class FakeSharedPreferenceEditor(private val preferences: SharedPreferences) : SharedPreferences.Editor{
+    inner class FakeSharedPreferenceEditor(private val preferences: SharedPreferences) :
+        SharedPreferences.Editor {
         override fun putString(p0: String?, p1: String?): SharedPreferences.Editor {
             map[p0] = p1
-            listener?.onSharedPreferenceChanged(preferences,p0)
+            listener?.onSharedPreferenceChanged(preferences, p0)
             return this
         }
 

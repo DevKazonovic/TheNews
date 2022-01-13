@@ -1,8 +1,8 @@
 package com.devkazonovic.projects.thenews.domain.mapper
 
-import com.devkazonovic.projects.thenews.AndroidTestFactory.dateFormatter_clock_ut_date2022_01_2_time0_0_0
+import com.devkazonovic.projects.thenews.AndroidTestFactory.dateFormatter_clock_utc_date2022_01_2_time0_0_0
 import com.devkazonovic.projects.thenews.data.local.database.entity.SourceEntity
-import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopStoryEntity
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
 import com.devkazonovic.projects.thenews.domain.model.Ago
@@ -35,18 +35,17 @@ class EntityMappersTest {
     @Before
     fun setUp() {
         sourceEntityMapper = SourceEntityMapper()
-        storyEntityMapper =
-            StoryEntityMapper(
-                sourceEntityMapper,
-                dateFormatter_clock_ut_date2022_01_2_time0_0_0
-            )
+        storyEntityMapper = StoryEntityMapper(
+            sourceEntityMapper,
+            dateFormatter_clock_utc_date2022_01_2_time0_0_0
+        )
     }
 
     companion object {
         private const val sourceId = "sourceId"
         val sourceEntity =
             SourceEntity(id = sourceId, name = "ABC News", url = "https://abcnews.go.com")
-        val storyEntity = StoryEntity(
+        val storyEntity = TopStoryEntity(
             url = "https://news.google.com/2022",
             title = "Test in 2022",
             publishDate = "Sat, 01 Jan 2022 05:25:02 GMT",

@@ -2,20 +2,24 @@ package com.devkazonovic.projects.thenews.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.devkazonovic.projects.thenews.data.local.database.dao.ReadLaterDao
-import com.devkazonovic.projects.thenews.data.local.database.dao.StoriesDao
+import com.devkazonovic.projects.thenews.data.local.database.dao.SavedStoriesDao
+import com.devkazonovic.projects.thenews.data.local.database.dao.TopStoriesDao
+import com.devkazonovic.projects.thenews.data.local.database.dao.TopicStoriesDao
 import com.devkazonovic.projects.thenews.data.local.database.entity.SavedStoryEntity
-import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopStoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopicStoryEntity
 
 @Database(
     entities = [
-        StoryEntity::class,
+        TopStoryEntity::class,
         SavedStoryEntity::class,
-    ], version = 12, exportSchema = false
+        TopicStoryEntity::class
+    ], version = 14, exportSchema = false
 )
 abstract class MainDataBase : RoomDatabase() {
 
-    abstract fun storiesDao(): StoriesDao
-    abstract fun readLaterDao(): ReadLaterDao
+    abstract fun topicStoriesDao(): TopicStoriesDao
+    abstract fun topStoriesDao(): TopStoriesDao
+    abstract fun savedStoriesDao(): SavedStoriesDao
 
 }

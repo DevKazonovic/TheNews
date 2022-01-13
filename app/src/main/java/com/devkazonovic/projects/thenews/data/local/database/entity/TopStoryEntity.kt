@@ -4,10 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.devkazonovic.projects.thenews.data.local.database.entity.SourceEntity.Companion.NO_SOURCE_ENTITY
 import java.io.Serializable
 
-@Entity(tableName = "savedstories")
-data class SavedStoryEntity(
+@Entity(tableName = "topstories")
+data class TopStoryEntity(
     @PrimaryKey @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "title") val title: String,
     @Embedded val sourceEntity: SourceEntity,
@@ -19,12 +20,8 @@ data class SavedStoryEntity(
 
     companion object {
         val EMPTY =
-            SavedStoryEntity(
-                url = "",
-                sourceEntity = SourceEntity.NO_SOURCE_ENTITY,
-                title = "",
-                publishDate = ""
-            )
+            TopStoryEntity(url = "", sourceEntity = NO_SOURCE_ENTITY, title = "", publishDate = "")
 
     }
 }
+

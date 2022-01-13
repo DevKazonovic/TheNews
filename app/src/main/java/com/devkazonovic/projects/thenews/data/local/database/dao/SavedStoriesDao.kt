@@ -7,7 +7,10 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 
 @Dao
-abstract class ReadLaterDao {
+abstract class SavedStoriesDao {
+    companion object {
+        private const val TABLE_SAVED_STORIES = "savedstories"
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(vararg savedStoryEntity: SavedStoryEntity): Completable
@@ -15,10 +18,13 @@ abstract class ReadLaterDao {
     @Delete
     abstract fun delete(vararg savedStoryEntity: SavedStoryEntity): Completable
 
-    @Query("SELECT * From readlater")
+    @Query("SELECT * From $TABLE_SAVED_STORIES")
     abstract fun findAll(): Flowable<List<SavedStoryEntity>>
 
-    @Query("SELECT * FROM readlater WHERE url=:url")
-    abstract fun isStorySaved(url: String): Maybe<SavedStoryEntity>
+    @Query("SELECT * FROM $TABLE_SAVED_STORIES WHERE url=:url")
+    abstract fun findByUrl(url: String): Maybe<SavedStoryEntity>
+
+    @Query("DELETE FROM $TABLE_SAVED_STORIES")
+    abstract fun deleteAll()
 
 }

@@ -8,12 +8,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.devkazonovic.projects.thenews.R
@@ -149,8 +147,8 @@ class ForYouFragment : Fragment() {
         IntentUtil.openUrl(requireContext(), it.url)
     }
 
-    private fun onRefresh(){
-        viewModel.loadData()
+    private fun onRefresh() {
+        viewModel.loadData(reload = true, clearCache = false)
     }
 
     private fun onLoading() {
@@ -179,7 +177,7 @@ class ForYouFragment : Fragment() {
         layoutError.txTitle.text = getString(R.string.errors_title)
         layoutError.txSubtitle.text = description
         layoutError.btnActionError.setOnClickListener {
-            viewModel.loadData()
+            onRefresh()
         }
     }
 

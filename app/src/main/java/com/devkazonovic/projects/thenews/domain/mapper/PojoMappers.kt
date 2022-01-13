@@ -1,7 +1,8 @@
 package com.devkazonovic.projects.thenews.domain.mapper
 
 import com.devkazonovic.projects.thenews.data.local.database.entity.SourceEntity
-import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopStoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopicStoryEntity
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
 import com.devkazonovic.projects.thenews.domain.model.Ago
@@ -12,32 +13,70 @@ import com.devkazonovic.projects.thenews.service.UniqueGenerator
 import javax.inject.Inject
 
 interface IPojoMappers {
-    fun storyPojoMapper(): PojoMapper<Item, StoryEntity, Story>
+    fun topStoryPojoMapper(): PojoMapper<Item, TopStoryEntity, Story>
     fun sourcePojoMapper(): PojoMapper<ItemSource, SourceEntity, Source>
+    fun topicStoryPojoMapper(): PojoMapper<Item, TopicStoryEntity, Story>
 }
 
 class PojoMappers @Inject constructor(
-    private val storyPojoMapper: StoryPojoMapper,
-    private val sourcePojoMapper: SourcePojoMapper
+    private val sourcePojoMapper: SourcePojoMapper,
+    private val topStoryPojoMapper: TopStoryPojoMapper,
+    private val topicStoryPojoMapper: TopicStoryPojoMapper
 ) : IPojoMappers {
-    override fun storyPojoMapper(): PojoMapper<Item, StoryEntity, Story> =
-        storyPojoMapper
-
     override fun sourcePojoMapper(): PojoMapper<ItemSource, SourceEntity, Source> =
         sourcePojoMapper
+
+    override fun topStoryPojoMapper(): PojoMapper<Item, TopStoryEntity, Story> =
+        topStoryPojoMapper
+
+    override fun topicStoryPojoMapper(): PojoMapper<Item, TopicStoryEntity, Story> =
+        topicStoryPojoMapper
 }
 
-/**Mappers*/
-class StoryPojoMapper @Inject constructor(
+
+class TopStoryPojoMapper @Inject constructor(
     private val sourcePojoMapper: SourcePojoMapper,
     private val dateTimeFormatter: DateTimeFormatter
-) : PojoMapper<Item, StoryEntity, Story> {
-
-    override fun toEntity(input: Item?): StoryEntity {
+) : PojoMapper<Item, TopStoryEntity, Story> {
+    override fun toEntity(input: Item?): TopStoryEntity {
         return if (input?.link == null) {
-            StoryEntity.EMPTY
+            TopStoryEntity.EMPTY
         } else {
-            StoryEntity(
+            TopStoryEntity(
+                url = input.link,
+                sourceEntity = sourcePojoMapper.toEntity(input.itemSource),
+                title = input.title ?: "",
+                publishDate = input.pubDate ?: "",
+            )
+        }
+    }
+
+    override fun toDomainModel(input: Item?): Story {
+        return if (input?.link == null) {
+            Story.EMPTY
+        } else {
+            Story(
+                url = input.link,
+                source = sourcePojoMapper.toDomainModel(input.itemSource),
+                title = input.title ?: "",
+                publishDate = input.pubDate ?: "",
+                publishDateFormat = input.pubDate?.let {
+                    dateTimeFormatter.calcTimePassed(it)
+                } ?: Pair(0, Ago.NON)
+            )
+        }
+    }
+}
+
+class TopicStoryPojoMapper @Inject constructor(
+    private val sourcePojoMapper: SourcePojoMapper,
+    private val dateTimeFormatter: DateTimeFormatter
+) : PojoMapper<Item, TopicStoryEntity, Story> {
+    override fun toEntity(input: Item?): TopicStoryEntity {
+        return if (input?.link == null) {
+            TopicStoryEntity.EMPTY
+        } else {
+            TopicStoryEntity(
                 url = input.link,
                 sourceEntity = sourcePojoMapper.toEntity(input.itemSource),
                 title = input.title ?: "",
@@ -71,10 +110,10 @@ class SourcePojoMapper @Inject constructor(
         return input?.let {
             SourceEntity(
                 id = uniqueGenerator.createSourceId(it.text),
-                name = it.text ?: StoryEntity.NO_SOURCE_VALUE,
-                url = it.url ?: StoryEntity.NO_SOURCE_VALUE
+                name = it.text ?: "",
+                url = it.url ?: ""
             )
-        } ?: StoryEntity.NO_SOURCE
+        } ?: SourceEntity.NO_SOURCE_ENTITY
     }
 
     override fun toDomainModel(input: ItemSource?): Source {

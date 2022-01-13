@@ -30,7 +30,7 @@ object AndroidTestFactory {
         override fun uiScheduler(): Scheduler = Schedulers.trampoline()
     }
 
-    const val URL_GOOGLE_NEWS_FEED = "https://news.google.com/"
+    private const val URL_GOOGLE_NEWS_FEED = "https://news.google.com/"
 
     private val okHttpClient = OkHttpClient.Builder().apply {
         addInterceptor(HttpLoggingInterceptor { println(it) }.setLevel(HttpLoggingInterceptor.Level.BODY))
@@ -45,7 +45,7 @@ object AndroidTestFactory {
         addConverterFactory(SimpleXmlConverterFactory.create())
     }.build()
 
-    val googleNewsClientForTest =
+    val googleNewsClientForTest: GoogleNewsClient =
         googleNewsRssRetrofit(URL_GOOGLE_NEWS_FEED, Schedulers.trampoline())
             .create(GoogleNewsClient::class.java)
 
@@ -55,22 +55,33 @@ object AndroidTestFactory {
             .build()
     }
 
-
-    val dateFormatter_clock_ut_date2022_01_2_time0_0_0 =
+    val dateFormatter_clock_utc_date2022_01_2_time0_0_0 =
         DateTimeFormatter(Clock.fixed(DateUtil.utc_date2022_01_2_time0_0_0(), ZoneOffset.UTC))
 
     fun domainModelMappers(): DomainModelMappers {
         val sourceModelMapper = SourceModelMapper()
-        val storyModelMapper = StoryModelMapper(sourceModelMapper)
+        val topStoryModelMapper = TopStoryModelMapper(sourceModelMapper)
         val savedStoryModelMapper = SavedStoryModelMapper(sourceModelMapper)
-        return DomainModelMappers(storyModelMapper, savedStoryModelMapper, sourceModelMapper)
+        val topicStoryModelMapper = TopicStoryModelMapper(sourceModelMapper)
+        return DomainModelMappers(
+            topStoryModelMapper,
+            savedStoryModelMapper,
+            topicStoryModelMapper,
+            sourceModelMapper
+        )
     }
 
     fun entityMappers(dateTimeFormatter: DateTimeFormatter): EntityMappers {
         val sourceEntityMapper = SourceEntityMapper()
         val storyEntityMapper = StoryEntityMapper(sourceEntityMapper, dateTimeFormatter)
         val savedStoryEntityMapper = SavedStoryMapper(sourceEntityMapper, dateTimeFormatter)
-        return EntityMappers(storyEntityMapper, sourceEntityMapper, savedStoryEntityMapper)
+        val topicStoryMapper = TopicStoryMapper(sourceEntityMapper, dateTimeFormatter)
+        return EntityMappers(
+            sourceEntityMapper,
+            storyEntityMapper,
+            savedStoryEntityMapper,
+            topicStoryMapper
+        )
     }
 
     fun pojoMappers(
@@ -78,8 +89,9 @@ object AndroidTestFactory {
         uniqueGenerator: UniqueGenerator
     ): PojoMappers {
         val sourcePojoMapper = SourcePojoMapper(uniqueGenerator)
-        val storyPojoMapper = StoryPojoMapper(sourcePojoMapper, dateTimeFormatter)
-        return PojoMappers(storyPojoMapper, sourcePojoMapper)
+        val storyPojoMapper = TopStoryPojoMapper(sourcePojoMapper, dateTimeFormatter)
+        val topicStoryPojoMapper = TopicStoryPojoMapper(sourcePojoMapper, dateTimeFormatter)
+        return PojoMappers(sourcePojoMapper, storyPojoMapper, topicStoryPojoMapper)
     }
 
 }

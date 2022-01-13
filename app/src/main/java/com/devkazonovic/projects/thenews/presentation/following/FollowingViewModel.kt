@@ -31,7 +31,7 @@ class FollowingViewModel @Inject constructor(
     }
 
     fun loadData() {
-        repository.getReadLaterStories()
+        repository.getSavedStories()
             .subscribeOn(rxSchedulers.ioScheduler())
             .observeOn(rxSchedulers.uiScheduler())
             .subscribe { _savedStories.postValue(it) }

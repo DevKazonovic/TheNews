@@ -11,7 +11,7 @@ import java.net.SocketException
 fun <T : Any> Single<T>.toResult(): Single<Resource<T>> = this
     .map<Resource<T>> { Resource.Success(it) }
     .onErrorReturn { exception ->
-        println(exception)
+        Timber.e("Error[RxJava] : $exception")
         when (exception) {
             is SocketException -> {
                 Resource.Error(R.string.error_unknown)
@@ -28,7 +28,7 @@ fun <T : Any> Single<T>.toResult(): Single<Resource<T>> = this
 fun <T : Any> Flowable<T>.toResult(): Flowable<Resource<T>> = this
     .map<Resource<T>> { Resource.Success(it) }
     .onErrorReturn { exception ->
-        Timber.e(exception)
+        Timber.e("Error[RxJava] : $exception")
         when (exception) {
             is SocketException -> {
                 Resource.Error(R.string.error_unknown)

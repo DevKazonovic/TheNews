@@ -1,7 +1,7 @@
 package com.devkazonovic.projects.thenews.domain.mapper
 
 import com.devkazonovic.projects.thenews.data.local.database.entity.SourceEntity
-import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopStoryEntity
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
 import com.devkazonovic.projects.thenews.domain.model.Ago
@@ -14,7 +14,7 @@ import org.junit.Test
 class DomainModelMappersTest {
 
     private lateinit var sourceModelMapper: SourceModelMapper
-    private lateinit var storyModelMapper: StoryModelMapper
+    private lateinit var topStoryModelMapper: TopStoryModelMapper
 
     @Test
     fun test_fromSourceDomainModel_toSourceEntity() {
@@ -25,16 +25,15 @@ class DomainModelMappersTest {
 
     @Test
     fun test_fromStoryDomainModel_toStoryEntity() {
-        assertThat(storyModelMapper.toEntity(storyDomainModel)).apply {
+        assertThat(topStoryModelMapper.toEntity(storyDomainModel)).apply {
             isEqualTo(expectedStoryEntity)
         }
     }
 
-
     @Before
     fun setUp() {
         sourceModelMapper = SourceModelMapper()
-        storyModelMapper = StoryModelMapper(sourceModelMapper)
+        topStoryModelMapper = TopStoryModelMapper(sourceModelMapper)
     }
 
     companion object {
@@ -53,7 +52,7 @@ class DomainModelMappersTest {
         val expectedSourceEntity =
             SourceEntity(id = sourceId, name = "ABC News", url = "https://abcnews.go.com")
 
-        val expectedStoryEntity = StoryEntity(
+        val expectedStoryEntity = TopStoryEntity(
             url = "https://news.google.com/2022",
             title = "Test in 2022",
             publishDate = "Sat, 01 Jan 2022 05:25:02 GMT",

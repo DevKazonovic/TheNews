@@ -1,15 +1,14 @@
 package com.devkazonovic.projects.thenews.data.local.sharedpref
 
 import com.devkazonovic.projects.thenews.domain.model.LanguageZone
-import io.reactivex.rxjava3.subscribers.TestSubscriber
-import org.junit.Assert.*
+import com.devkazonovic.projects.thenews.fake.FakeSharedPreferences
 
 import org.junit.Before
 import org.junit.Test
 
 class SharedPreferencesTest {
 
-    private lateinit var localKeyValue : LocalKeyValue
+    private lateinit var localKeyValue: LocalKeyValue
 
     @Before
     fun setUp() {
@@ -17,19 +16,19 @@ class SharedPreferencesTest {
     }
 
     @Test
-    fun test_whenObservingSharedPreferenceForFirstTime_thenGetCurrentSavedLanguageZoneValue(){
+    fun test_whenObservingSharedPreferenceForFirstTime_thenGetCurrentSavedLanguageZoneValue() {
         localKeyValue.saveLanguageZone(LanguageZone.DEFAULT.getCeId())
-        val testObserver = localKeyValue.behaviorSubject.test()
+        val testObserver = localKeyValue.languageZoneObservable.test()
         testObserver.assertValue(LanguageZone.DEFAULT.getCeId())
         testObserver.assertNotComplete()
 
     }
 
     @Test
-    fun test_whenLanguageZoneValueChanges_thenGetNewValue(){
+    fun test_whenLanguageZoneValueChanges_thenGetNewValue() {
         //Given
         localKeyValue.saveLanguageZone(LanguageZone.DEFAULT.getCeId())
-        val testObserver = localKeyValue.behaviorSubject.test()
+        val testObserver = localKeyValue.languageZoneObservable.test()
         testObserver.assertValue(LanguageZone.DEFAULT.getCeId())
 
         //When
@@ -37,22 +36,24 @@ class SharedPreferencesTest {
         localKeyValue.saveLanguageZone(ceid)
 
         //Then
-        testObserver.assertValueSequence(listOf(LanguageZone.DEFAULT.getCeId(),ceid))
+        testObserver.assertValueSequence(listOf(LanguageZone.DEFAULT.getCeId(), ceid))
         testObserver.assertNotComplete()
     }
 
     @Test
-    fun test_whenLanguageZoneValueChanges_thenGetNewValue_andComplete(){
+    fun test_whenLanguageZoneValueChanges_thenGetNewValue_andComplete() {
         //Given
         localKeyValue.saveLanguageZone(LanguageZone.DEFAULT.getCeId())
-        val testObserver = localKeyValue.behaviorSubject.test()
+        val testObserver = localKeyValue.languageZoneObservable.test()
         testObserver.assertValue(LanguageZone.DEFAULT.getCeId())
 
         //When
         val ceid = "MA:fr"
         localKeyValue.saveLanguageZone(ceid)
-        localKeyValue. stopObservingSharedPreference()
+        localKeyValue.stopObservingSharedPreference()
         //Then
-        testObserver.assertResult(LanguageZone.DEFAULT.getCeId(),ceid)
+        testObserver.assertResult(LanguageZone.DEFAULT.getCeId(), ceid)
     }
+
+
 }

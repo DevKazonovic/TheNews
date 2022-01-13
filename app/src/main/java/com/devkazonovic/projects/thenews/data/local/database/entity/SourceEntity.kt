@@ -4,13 +4,14 @@ import androidx.room.ColumnInfo
 import java.io.Serializable
 
 data class SourceEntity(
-    @ColumnInfo(name = "sourceId") val id: String,
-    @ColumnInfo(name = "sourceName") val name: String,
-    @ColumnInfo(name = "sourceUrl") val url: String
+    @ColumnInfo(name = "source_id") val id: String,
+    @ColumnInfo(name = "source_name") val name: String,
+    @ColumnInfo(name = "source_url") val url: String
 ) : Serializable {
     companion object {
-        const val NO_VALUE = "NON"
-        val NO_SOURCE = SourceEntity(id = NO_VALUE, name = NO_VALUE, url = NO_VALUE)
+        private const val NO_SOURCE_VALUE = "NON"
+        val NO_SOURCE_ENTITY =
+            SourceEntity(id = NO_SOURCE_VALUE, name = NO_SOURCE_VALUE, url = NO_SOURCE_VALUE)
 
     }
 }

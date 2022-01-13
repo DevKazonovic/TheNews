@@ -16,7 +16,7 @@ open class ArticleScrapper @Inject constructor(
 
 
     open fun getArticleImageUrl(url: String): Single<String> {
-        return Single.fromCallable {
+        return Single.fromSupplier {
             try {
                 val doc = Jsoup.connect(url)
                     .followRedirects(true)

@@ -1,8 +1,8 @@
 package com.devkazonovic.projects.thenews.domain.mapper
 
-import com.devkazonovic.projects.thenews.AndroidTestFactory.dateFormatter_clock_ut_date2022_01_2_time0_0_0
+import com.devkazonovic.projects.thenews.AndroidTestFactory.dateFormatter_clock_utc_date2022_01_2_time0_0_0
 import com.devkazonovic.projects.thenews.data.local.database.entity.SourceEntity
-import com.devkazonovic.projects.thenews.data.local.database.entity.StoryEntity
+import com.devkazonovic.projects.thenews.data.local.database.entity.TopStoryEntity
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.Item
 import com.devkazonovic.projects.thenews.data.remote.googlenewsrss.ItemSource
 import com.devkazonovic.projects.thenews.domain.model.Ago
@@ -19,7 +19,7 @@ import org.mockito.kotlin.whenever
 class PojoMappersTest {
 
     private lateinit var sourcePojoMapper: SourcePojoMapper
-    private lateinit var storyPojoMapper: StoryPojoMapper
+    private lateinit var topStoryPojoMapper: TopStoryPojoMapper
 
     @Test
     fun test_fromItemSource_toSourceEntity() {
@@ -38,13 +38,13 @@ class PojoMappersTest {
 
     @Test
     fun test_fromItem_toStoryEntity() {
-        assertThat(storyPojoMapper.toEntity(rssStory))
+        assertThat(topStoryPojoMapper.toEntity(rssStory))
             .isEqualTo(expectedStoryEntity)
     }
 
     @Test
     fun test_fromItem_toStoryDomainModel() {
-        assertThat(storyPojoMapper.toDomainModel(rssStory))
+        assertThat(topStoryPojoMapper.toDomainModel(rssStory))
             .isEqualTo(expectedStoryDomainModel)
     }
 
@@ -52,8 +52,8 @@ class PojoMappersTest {
     fun setUp() {
         val uniqueGenerator = mock(UniqueGenerator::class.java)
         sourcePojoMapper = SourcePojoMapper(uniqueGenerator)
-        storyPojoMapper =
-            StoryPojoMapper(sourcePojoMapper, dateFormatter_clock_ut_date2022_01_2_time0_0_0)
+        topStoryPojoMapper =
+            TopStoryPojoMapper(sourcePojoMapper, dateFormatter_clock_utc_date2022_01_2_time0_0_0)
 
         whenever(uniqueGenerator.createSourceId(anyString())).thenReturn(sourceId)
     }
@@ -74,7 +74,7 @@ class PojoMappersTest {
             pubDate = "Sat, 01 Jan 2022 05:25:02 GMT",
             itemSource = rssSource
         )
-        val expectedStoryEntity = StoryEntity(
+        val expectedStoryEntity = TopStoryEntity(
             url = "https://news.google.com/2022",
             title = "Test in 2022",
             publishDate = "Sat, 01 Jan 2022 05:25:02 GMT",

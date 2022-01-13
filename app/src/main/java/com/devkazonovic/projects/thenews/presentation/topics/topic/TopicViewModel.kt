@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.devkazonovic.projects.thenews.common.util.RxSchedulers
-import com.devkazonovic.projects.thenews.data.local.sharedpref.LocalKeyValue
 import com.devkazonovic.projects.thenews.domain.MainRepository
-import com.devkazonovic.projects.thenews.domain.model.LanguageZone
 import com.devkazonovic.projects.thenews.domain.model.Resource
 import com.devkazonovic.projects.thenews.domain.model.Story
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,29 +15,26 @@ import javax.inject.Inject
 @HiltViewModel
 class TopicViewModel @Inject constructor(
     private val repository: MainRepository,
-    private val localKeyValue: LocalKeyValue,
     private val schedulers: RxSchedulers
 ) : ViewModel() {
 
     private val rxDisposable = CompositeDisposable()
-    private var ceid = LanguageZone.DEFAULT.getCeId()
-    private val _stories = MutableLiveData<Resource<List<Story>>>()
     private val _topicId = MutableLiveData<String>()
+    private val _stories = MutableLiveData<Resource<List<Story>>>()
 
     init {
-        localKeyValue.behaviorSubject
+        repository.getLanguageZoneObservable()
             .observeOn(schedulers.uiScheduler())
             .subscribe { languageZone ->
-                ceid = languageZone
-                loadData()
+                loadData(reload = true, clearCache = true)
             }.addTo(rxDisposable)
 
     }
 
-    fun loadData() {
+    fun loadData(reload: Boolean, clearCache: Boolean) {
         _stories.postValue(Resource.Loading())
         _topicId.value?.let {
-            repository.getTopicStories(topicId = it, languageZoneId = ceid)
+            repository.getTopicStories(topicId = it, reload = reload, cleanCache = clearCache)
                 .subscribeOn(schedulers.ioScheduler())
                 .observeOn(schedulers.uiScheduler())
                 .subscribe { resource ->
@@ -56,7 +51,6 @@ class TopicViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        localKeyValue.stopObservingSharedPreference()
         rxDisposable.clear()
     }
 

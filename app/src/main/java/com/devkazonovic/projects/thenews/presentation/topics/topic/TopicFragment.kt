@@ -118,6 +118,10 @@ class HeadlineFragment : Fragment() {
         }
     }
 
+    fun onRefresh() {
+        viewModel.loadData(reload = true, clearCache = false)
+    }
+
     private fun onError(description: String) {
         ViewUtil.hide(layoutData)
         ViewUtil.hide(layoutLoad)
@@ -125,7 +129,7 @@ class HeadlineFragment : Fragment() {
         layoutError.txTitle.text = getString(R.string.errors_title)
         layoutError.txSubtitle.text = description
         layoutError.btnActionError.setOnClickListener {
-            viewModel.loadData()
+            onRefresh()
         }
     }
 
