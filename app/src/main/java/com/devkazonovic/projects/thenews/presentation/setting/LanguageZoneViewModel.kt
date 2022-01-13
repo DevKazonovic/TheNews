@@ -27,8 +27,7 @@ class LanguageZoneViewModel @Inject constructor(
                 val currentSelected =
                     list.findLast { it.getCeId() == repository.getCurrentLanguageZone() }
                 _currentSelectedLanguage.value = currentSelected ?: LanguageZone.DEFAULT
-                _languageZoneList.postValue(list.toMutableList().apply { remove(currentSelected) })
-
+                _languageZoneList.postValue(list.toMutableList())
             }
 
     }

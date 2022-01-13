@@ -84,10 +84,13 @@ class LanguageSettingFragment : Fragment() {
 
         radioGroupList.removeAllViews()
         if (list.isNotEmpty()) {
-
+            val currentLanguageZoneId = viewModel.currentSelectedLanguage.value
             for (i in 0..list.lastIndex) {
                 radioGroupList.addView(RadioButton(requireContext()).apply {
                     id = i
+                    if (list[i].getCeId() == currentLanguageZoneId?.getCeId()) {
+                        isChecked = true
+                    }
                     text = list[i].name
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         setTextAppearance(

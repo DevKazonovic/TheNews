@@ -29,7 +29,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     app:endIconMode="clear_text"
-
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -38,6 +37,7 @@
                         android:layout_gravity="center_vertical"
                         android:clipToPadding="true"
                         android:hint="@string/hint_search"
+                        android:imeOptions="actionSearch"
                         android:inputType="text"
                         android:padding="8dp"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />

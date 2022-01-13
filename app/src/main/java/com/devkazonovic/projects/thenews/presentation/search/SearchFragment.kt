@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.Toolbar
-import androidx.core.widget.doOnTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +28,6 @@ import com.devkazonovic.projects.thenews.presentation.common.StoriesListAdapter
 import com.devkazonovic.projects.thenews.presentation.common.storymenu.StoryMenuFragment
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,7 +41,6 @@ class SearchFragment : Fragment() {
     private lateinit var layoutData: ViewGroup
     private lateinit var layoutLoad: LayoutLoadingBinding
     private lateinit var layoutError: LayoutErrorBinding
-    private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var rvSearchStory: RecyclerView
@@ -57,21 +54,23 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        navController = findNavController()
         initViews()
-        toolbar.setMainPageToolbar(navController, drawerLayout)
+        toolbar.setMainPageToolbar(findNavController(), drawerLayout)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpStoriesRecyclerView()
-        tfSearch.editText?.doOnTextChanged { text, _, _, _ ->
-            Timber.d(text.toString())
-            viewModel.setSearchKeyWord(text?.trim().toString())
-            viewModel.search()
+        tfSearch.editText!!.setOnEditorActionListener { textView, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.setSearchKeyWord(tfSearch.editText!!.text.toString().trim())
+                viewModel.search()
+                true
+            } else {
+                false
+            }
         }
-
         viewModel.result.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -102,6 +101,10 @@ class SearchFragment : Fragment() {
             layoutError = it.layoutError
             rvSearchStory = it.rvSearchStories
             tfSearch = it.tfSearch
+        }
+
+        layoutError.btnActionError.setOnClickListener {
+            viewModel.search()
         }
     }
 

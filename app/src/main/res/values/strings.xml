@@ -24,7 +24,7 @@
     <string name="label_remove_story">Remove from saved stories</string>
     <string name="label_share_story">Share</string>
     <string name="label_open_storySource">Open source web site</string>
-    <string name="title_languagezone"><![CDATA[Languages &amp; Regions]]></string>
+    <string name="title_languagezone">Languages &amp; Regions</string>
 
     <plurals name="year">
         <item quantity="one"> %d year</item>
